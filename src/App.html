@@ -1,0 +1,31 @@
+<script>
+	
+	import NoPackage from "./NoPackage.html";
+	import PackageRoot from "./PackageRoot.html";
+	
+	export default {
+		components: {
+			NoPackage, PackageRoot
+		}
+	};
+
+</script>
+
+<div class="app-root">
+	{#if $hasAppPackage}
+	<PackageRoot />
+	{/if}
+
+	{#if !$hasAppPackage}
+	<NoPackage />
+	{/if}
+	
+</div>
+
+<style>
+	.app-root {
+		height: 100%;
+		width: 100%;
+		font-family: "Nunito", Helvetica, Arial, sans-serif;
+	}
+</style>

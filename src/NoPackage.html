@@ -1,0 +1,54 @@
+<script>
+    
+    export default {
+		components: {
+		}
+	};
+
+</script>
+
+<div class="root">
+    <div class="inner">
+        <img src="assets/budibase-logo.png" class="logo" alt="budibase logo"/>
+        <div class="card">
+            
+            <div class="card-body">
+                <h5 style="margin-bottom: 20px">What would you like to do?</h5>
+                <button class="btn btn-primary btn-lg"
+                        on:click="$createNewPackage()">
+                    Create a New Package
+                </button>
+                <button style="margin-left: 5px"
+                        class="btn btn-primary btn-lg">
+                    Import a Package
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+	.root {
+        position: fixed;
+        margin: 0 auto;
+        text-align: center;
+        top: 20%;
+        /*color: #333333;
+        background-color: #fdfdfd;*/
+        width:100%;
+	}
+
+    .inner {
+        display:inline-block;
+        margin: auto;
+    }
+
+    .logo {
+        width: 300px;
+        margin-bottom: 70px;
+    }
+
+    .root :global(.option) {
+        width:250px;
+    }
+</style>
