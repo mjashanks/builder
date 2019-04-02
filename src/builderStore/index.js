@@ -10,5 +10,6 @@ class BuilderStore extends Store {
 export default new BuilderStore({
     hasAppPackage:false,
     heirarchy: {},
+    activeNav: "database"
 });
 

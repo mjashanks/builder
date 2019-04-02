@@ -1,28 +1,18 @@
 <script>
 
-	export default {
-		components: {
-		}
-	};
+import Nav from "./nav/Nav.html";
+
+export default {
+  components: {
+    Nav
+  }
+};
 
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Database<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Actions and Triggers</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">User Interface</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<div class="root">
+  <Nav />
+</div>
 
 
 
@@ -32,15 +22,4 @@
 		width: 100%;
 	}
 
-/*
-    .nav {
-        background: #162b4d;
-        padding: 7px 0;
-        font-size: 1.2em;
-        box-shadow: 0px 3px 2px 0px rgba(160,160,160,1);
-    }
-    
-    .nav a {
-        color:white;
-    }*/
 </style>

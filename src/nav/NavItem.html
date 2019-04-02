@@ -1,0 +1,35 @@
+<script>
+
+export default {
+    computed: {
+        navActive : ({$activeNav, name}) =>
+            name === $activeNav ? "active" : ""
+    
+    },
+    methods: {
+        setActive () {
+            this.store.set({activeNav:this.get("name")})
+        }
+    },
+    data: () => ({
+        name: "", label: ""
+    })
+};
+
+</script>
+
+<li class="nav-item {navActive}" >
+    <a class="nav-link" 
+       href="#" 
+       on:click="setActive()">{label}</a>
+</li>
+
+
+<style>
+
+  .nav-item {
+    font-size: 1.1em;
+    margin-right:10px;
+  }
+
+</style>
