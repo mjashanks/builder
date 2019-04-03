@@ -1,9 +1,12 @@
 <script>
-    
-    export default {
-		components: {
-		}
-	};
+
+import Button from "./common/Button.html"
+
+export default {
+    components: {
+        Button
+    }
+};
 
 </script>
 
@@ -14,41 +17,42 @@
             
             <div class="card-body">
                 <h5 style="margin-bottom: 20px">What would you like to do?</h5>
-                <button class="btn btn-primary btn-lg"
+                <Button color="primary"
                         on:click="$createNewPackage()">
                     Create a New Package
-                </button>
-                <button style="margin-left: 5px"
-                        class="btn btn-primary btn-lg">
+                </Button>
+                <Button color="primary">
                     Import a Package
-                </button>
+                </Button>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-	.root {
-        position: fixed;
-        margin: 0 auto;
-        text-align: center;
-        top: 20%;
-        /*color: #333333;
-        background-color: #fdfdfd;*/
-        width:100%;
-	}
 
-    .inner {
-        display:inline-block;
-        margin: auto;
-    }
+.root {
+    position: fixed;
+    margin: 0 auto;
+    text-align: center;
+    top: 20%;
+    /*color: #333333;
+    background-color: #fdfdfd;*/
+    width:100%;
+}
 
-    .logo {
-        width: 300px;
-        margin-bottom: 70px;
-    }
+.inner {
+    display:inline-block;
+    margin: auto;
+}
 
-    .root :global(.option) {
-        width:250px;
-    }
+.logo {
+    width: 300px;
+    margin-bottom: 70px;
+}
+
+.root :global(.option) {
+    width:250px;
+}
+
 </style>

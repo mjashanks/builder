@@ -12,16 +12,16 @@ export default {
   },
 
   data : () => ({
-    navHeight: "50px"
+    navWidth: "200px"
   })
 };
 
 </script>
 
 <div class="root">
-  <Nav height={navHeight}/>
+  <Nav width={navWidth}/>
   <div class="content" 
-       style="height: calc(100% - {navHeight})">
+       style="width: calc(100% - {navWidth}); left: {navWidth}">
     {#if $activeNav === "database"}
     <Database />
     {:elseif $activeNav === "actions and triggers"}
@@ -36,12 +36,11 @@ export default {
 
 <style>
 	.root {
-		height: 100%;
-		width: 100%;
+    height: 100%;
 	}
   
   .content {
-    width:100%;
+    position: fixed;
   }
 
 </style>

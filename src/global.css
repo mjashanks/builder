@@ -1,11 +1,13 @@
 :root {
     --primary100: #454CA0FF;
     --primary75: #454CA0BF;
+    --primary25: #454CA040;
     --primary10: #454CA01A;
     --primarydark: #3F448A;
     
     --secondary100: #162B4DFF;
     --secondary75: #162B4DBF;
+    --secondary25: #162B4D40;
     --secondary10: #162B4D1A;
     --secondarydark: #3F448A;
 
@@ -13,11 +15,13 @@
     
     --success100: #49C39EFF;
     --success75: #49C39EBF;
+    --success25: #49C39E40;
     --success10: #49C39E1A;
     --successdark: #44B492;
     
     --deletion100: #F2545BFF;
     --deletion75: #F2545BBF;
+    --deletion25: #F2545B40;
     --deletion1A: #F2545B1A;
     --deletiondark: #CF4046;
 

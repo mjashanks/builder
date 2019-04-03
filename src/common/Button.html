@@ -6,19 +6,46 @@ export default {
 
 </script>
 
-<button>
+<button class="{color}" on:click>
     <slot/>
 </button>
 
 <style>
 
 button {
-    border-radius: var(--borderradius);    
+    border-radius: var(--borderradius);   
+    border-style: solid; 
+    padding: 7px 15px;
 }
 
 .primary {
     background-color: var(--primary100);
+    border-color: var(--primary100);
     color: var(--white);
+}
+
+.primary:hover {
+    background-color: var(--primary75);
+    border-color: var(--primary75);
+}
+
+.primary:pressed {
+    background-color: var(--primarydark);
+    border-color: var(--primarydark);
+}
+
+.primary-outline {
+    background-color: var(--white);
+    border-color: var(--primary100);
+    color: var(--primary100);
+}
+
+.primary-outline:hover {
+    background-color: var(--primary10);
+}
+
+.primary-outline:pressed {
+    background-color: var(--primary25);
 }
 
 </style>

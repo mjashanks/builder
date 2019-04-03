@@ -32,6 +32,17 @@ module.exports = {
 				}
 			},
 			{
+				test: /\.(png|jpg|gif|woff2)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[path][name].[ext]'
+						},
+					},
+				]
+			},
+			{
 				test: /\.css$/,
 				use: [
 					/**
@@ -40,17 +51,6 @@ module.exports = {
 					 * */
 					prod ? MiniCssExtractPlugin.loader : 'style-loader',
 					'css-loader'
-				]
-			},
-			{
-				test: /\.(png|jpg|gif)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[path][name].[ext]'
-						},
-					},
 				]
 			}
 		]
