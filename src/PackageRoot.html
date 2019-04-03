@@ -4,11 +4,12 @@ import Nav from "./nav/Nav.html";
 import Database from "./database/DatabaseRoot.html" ;
 import UserInterface from "./userInterface/UserInterfaceRoot.html" ;
 import ActionsAndTriggers from "./actionsAndTriggers/ActionsAndTriggersRoot.html" ;
+import ComingSoon from "./common/ComingSoon.html";
 
 export default {
   components: {
     Nav, Database, UserInterface,
-    ActionsAndTriggers
+    ActionsAndTriggers, ComingSoon
   },
 
   data : () => ({
@@ -20,15 +21,24 @@ export default {
 
 <div class="root">
   <Nav width={navWidth}/>
-  <div class="content" 
+  <div class="content-wrapper" 
        style="width: calc(100% - {navWidth}); left: {navWidth}">
-    {#if $activeNav === "database"}
-    <Database />
-    {:elseif $activeNav === "actions and triggers"}
-    <ActionsAndTriggers />
-    {:elseif $activeNav === "user interface"}
-    <UserInterface />
-    {/if}
+    <div class="content-wrapper-inner">
+      <div class="header"></div>
+      <div class="content">    
+        {#if $activeNav === "database"}
+        <Database />
+        {:elseif $activeNav === "actions"}
+        <ActionsAndTriggers />
+        {:elseif $activeNav === "triggers"}
+        <ComingSoon name="Triggers"/>
+        {:elseif $activeNav === "access levels"}
+        <ComingSoon name="Access Levels" />
+        {:elseif $activeNav === "user interface"}
+        <UserInterface />
+        {/if}
+      </div>
+    </div>
   </div>
 </div>
 
@@ -39,8 +49,25 @@ export default {
     height: 100%;
 	}
   
-  .content {
+  .content-wrapper-inner {
+    background-color: var(--secondary100);
+  }
+
+  .content-wrapper {
     position: fixed;
+  }
+
+  .content {
+    border-radius: 10px 0 0 0;
+    padding-left: 10px;
+    background-color: var(--white);
+    overflow:auto;
+    top:10px;
+  }
+
+  .header {
+    height:5px;
+    background: var(--secondary100);
   }
 
 </style>

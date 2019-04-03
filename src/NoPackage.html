@@ -12,16 +12,18 @@ export default {
 
 <div class="root">
     <div class="inner">
-        <img src="assets/budibase-logo.png" class="logo" alt="budibase logo"/>
-        <div class="card">
+        <img src="/assets/budibase-logo.png" class="logo" alt="budibase logo"/>
+        <div>
             
-            <div class="card-body">
-                <h5 style="margin-bottom: 20px">What would you like to do?</h5>
+            <div>
+                <h4 style="margin-bottom: 20px">What would you like to do?</h4>
                 <Button color="primary"
-                        on:click="$createNewPackage()">
+                        on:click="$createNewPackage()"
+                        class="option">
                     Create a New Package
                 </Button>
-                <Button color="primary">
+                <Button color="primary-outline"
+                        class="option">
                     Import a Package
                 </Button>
             </div>
@@ -48,7 +50,7 @@ export default {
 
 .logo {
     width: 300px;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
 }
 
 .root :global(.option) {
