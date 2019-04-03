@@ -1,6 +1,4 @@
 import App from './App.html';
-import 'bootstrap';
-import './bootstrap.min.css'
 import store from "./builderStore/index.js";
 import '../assets/budibase-logo.png';
 import './global.css'

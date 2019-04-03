@@ -10,19 +10,21 @@ export default {
 
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
-      <NavItem name="database" label="Database" />
-      <NavItem name="actions and triggers" label="Actions and Triggers" />
-      <NavItem name="ui" label="User Interface" />
-    </ul>
-  </div>
+<nav class="nav"
+     style="width: {width};">
+    <NavItem name="database" label="Database" />
+    <NavItem name="actions and triggers" label="Actions and Triggers" />
+    <NavItem name="user interface" label="User Interface" />
 </nav>
 
 
 
 <style>
+
+.nav {
+  height: 100%;
+  position: fixed;
+  left: 0px;
+}
 
 </style>

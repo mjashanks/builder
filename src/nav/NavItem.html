@@ -8,7 +8,7 @@ export default {
     },
     methods: {
         setActive () {
-            this.store.set({activeNav:this.get("name")})
+            this.store.set({activeNav:this.get().name})
         }
     },
     data: () => ({
@@ -18,18 +18,19 @@ export default {
 
 </script>
 
-<li class="nav-item {navActive}" >
+<div class="nav-item {navActive}" >
     <a class="nav-link" 
        href="#" 
        on:click="setActive()">{label}</a>
-</li>
+</div>
 
 
 <style>
 
   .nav-item {
     font-size: 1.1em;
-    margin-right:10px;
+    padding: 5px;
+    display: block;
   }
 
 </style>

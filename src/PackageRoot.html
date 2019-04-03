@@ -1,17 +1,35 @@
 <script>
 
 import Nav from "./nav/Nav.html";
+import Database from "./database/DatabaseRoot.html" ;
+import UserInterface from "./userInterface/UserInterfaceRoot.html" ;
+import ActionsAndTriggers from "./actionsAndTriggers/ActionsAndTriggersRoot.html" ;
 
 export default {
   components: {
-    Nav
-  }
+    Nav, Database, UserInterface,
+    ActionsAndTriggers
+  },
+
+  data : () => ({
+    navHeight: "50px"
+  })
 };
 
 </script>
 
 <div class="root">
-  <Nav />
+  <Nav height={navHeight}/>
+  <div class="content" 
+       style="height: calc(100% - {navHeight})">
+    {#if $activeNav === "database"}
+    <Database />
+    {:elseif $activeNav === "actions and triggers"}
+    <ActionsAndTriggers />
+    {:elseif $activeNav === "user interface"}
+    <UserInterface />
+    {/if}
+  </div>
 </div>
 
 
@@ -21,5 +39,9 @@ export default {
 		height: 100%;
 		width: 100%;
 	}
+  
+  .content {
+    width:100%;
+  }
 
 </style>
