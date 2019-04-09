@@ -1,0 +1,47 @@
+<script>
+
+export default {
+    computed : {
+    }
+};
+
+</script>
+
+<div class="root">
+    <div class="title">{record.name}</div>
+    <div class="inner">
+        <div class="node-path">{record.nodeKey()}</div>
+    </div>
+</div>
+
+<style>
+
+.root {
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--secondary75);
+    border-radius: var(--borderradius);
+    display: inline-block;
+    margin:15px;
+    box-shadow: -4px 2px 3px 0px var(--primary25);
+    width:300px;
+}
+
+.title {
+    font: var(--bodytext);
+    background-color: var(--secondary75);
+    padding: 15px;
+    color: var(--white);
+}
+
+.inner {
+    padding: 15px;
+}
+
+.node-path {
+    font: var(--smallbodytext);
+}
+
+
+
+</style>

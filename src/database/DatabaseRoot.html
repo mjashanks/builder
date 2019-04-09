@@ -1,16 +1,29 @@
 <script>
 
 import ComingSoon from "../common/ComingSoon.html";
+import RecordCard from "./RecordCard.html";
 
 export default {
     components: {
-        ComingSoon
+        ComingSoon, RecordCard
+    },
+
+    data() {
+        return ({
+            records : [
+                {name: "Customer", nodeKey: () => "/customers/<id>"},
+                {name: "Partners", nodeKey: () => "/partners/<id>"},
+            ]
+        })
     }
 }
 
 </script>
 
-<ComingSoon name="Database Designer"/>
+{#each records as record}
+<RecordCard record={record} />
+{/each}
+
 
 <style>
 
