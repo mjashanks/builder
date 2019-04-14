@@ -1,14 +1,9 @@
 <script>
 
-import feather from "feather-icons";
-
 export default {
     computed: {
         navActive : ({$activeNav, name}) =>
-            name === $activeNav ? "active" : "",
-        
-        theIcon: ({icon}) => feather.toSvg(icon)
-        
+            name === $activeNav ? "active" : ""        
     
     },
     methods: {
@@ -26,7 +21,7 @@ export default {
 <div class="nav-item" 
      on:click="setActive()">
      <div class="inner {navActive}">
-        <div class="icon">{@html theIcon}</div>
+        <div class="icon">{@html $getIcon(icon)}</div>
         <span>{label}</span>
     </div>
 </div>

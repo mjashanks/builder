@@ -8,9 +8,38 @@ export default {
 </script>
 
 <div class="root">
-    <div class="title">{record.name}</div>
+    <div class="title">{record.name}<span class="node-path">{record.nodeKey()}</span></div>
     <div class="inner">
-        <div class="node-path">{record.nodeKey()}</div>
+        <div class="inner-col left">
+            <div class="inner-section">
+                <div class="inner-title">Child Records</div>
+                <div class="inner-content">
+                    {#each record.children as child}
+                    <div class="row"><a>{child.name}</a></div>
+                    <div>{child.nodeKey()}</div>
+                    {/each}
+                </div>
+            </div>
+            <div class="inner-section" style="margin-top: 10px">
+                <div class="inner-title">Indexes</div>
+                <div class="inner-content">
+                    {#each record.indexes as index}
+                    <div class="row"><a>{index.name}</a></div>
+                    <div>{index.nodeKey()}</div>
+                    {/each}
+                </div>
+            </div>
+        </div>
+        <div class="inner-col right" >
+            <div class="inner-section">
+                <div class="inner-title">Fields</div>
+                <div class="inner-content">
+                    {#each record.fields as field}
+                    <div class="row">{field.name}</div>
+                    {/each}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -21,10 +50,10 @@ export default {
     border-width: 2px;
     border-color: var(--secondary75);
     border-radius: var(--borderradius);
-    display: inline-block;
+    display: block;
     margin:15px;
     box-shadow: -4px 2px 3px 0px var(--primary25);
-    width:300px;
+    width: calc(100% - 30px);
 }
 
 .title {
@@ -38,10 +67,45 @@ export default {
     padding: 15px;
 }
 
-.node-path {
-    font: var(--smallbodytext);
+.inner-col {
+    display:inline-block;
+    vertical-align: top;
+    margin: 0px 5px;
 }
 
+.inner-col.right {
+    width:calc(30% - 15px);
+}
 
+.inner-col.left {
+    width:calc(70% - 15px);
+}
+
+.inner-section {
+    padding: 0;
+    border-width: 1px;
+    border-radius: var(--borderradius);
+    border-color: var(--primary25);
+    border-style: solid;
+}
+
+.node-path {
+    font: var(--smallbodytext);
+    color: var(--slate);
+    margin-left: 15px;
+}
+
+.inner-title {
+    background-color: var(--primary10);
+    padding: 3px;
+}
+
+.inner-content {
+    padding:5px;
+}
+
+.inner-content > .row {
+    margin-top:5px;
+}
 
 </style>

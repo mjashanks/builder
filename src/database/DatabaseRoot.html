@@ -20,7 +20,7 @@ export default {
 
 </script>
 
-{#each records as record}
+{#each $currentNode.children as record}
 <RecordCard record={record} />
 {/each}
 

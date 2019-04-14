@@ -19,6 +19,8 @@
     "dev": "webpack-dev-server --content-base public"
   },
   "dependencies": {
-    "feather-icons": "^4.21.0"
+    "budibase-core": "git+ssh://git@gitlab.com/budibase-dist/budibase-core.git",
+    "feather-icons": "^4.21.0",
+    "lodash": "^4.17.11"
   }
 }
