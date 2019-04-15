@@ -1,32 +1,53 @@
 <script>
 
 export default {
-    computed : {
+    data() {
+        return ({
+            isExpanded:false,
+            level:0
+        })
+    },
+    computed: {
+        expandIcon:({isExpanded}) => 
+            isExpanded ? "chevron-down" : "chevron-right"
     }
 };
 
 </script>
 
-<div class="root">
-    <div class="title">{record.name}<span class="node-path">{record.nodeKey()}</span></div>
+<div class="root" style="margin-left: {level * 30}px; margin-top: {level === 0 ? 30 : 3}px; width: calc(100% - {20 + (level * 30)}px)  ">
+    <div class="title">
+        {record.name}
+        <span class="node-path">{record.nodeKey()}</span>
+        <div class="title-action" on:click="set({isExpanded : !isExpanded})">
+            {@html $getIcon(expandIcon)}
+        </div>
+    </div>
+    {#if isExpanded}
     <div class="inner">
         <div class="inner-col left">
-            <div class="inner-section">
+            <!--<div class="inner-section">
                 <div class="inner-title">Child Records</div>
                 <div class="inner-content">
                     {#each record.children as child}
                     <div class="row"><a>{child.name}</a></div>
                     <div>{child.nodeKey()}</div>
                     {/each}
+                    {#if record.children.length === 0}
+                    <span style="color: var(--slate)">(none)</span>
+                    {/if}
                 </div>
-            </div>
-            <div class="inner-section" style="margin-top: 10px">
+            </div>-->
+            <div class="inner-section">
                 <div class="inner-title">Indexes</div>
                 <div class="inner-content">
                     {#each record.indexes as index}
                     <div class="row"><a>{index.name}</a></div>
                     <div>{index.nodeKey()}</div>
                     {/each}
+                    {#if record.indexes.length === 0}
+                    <span style="color: var(--slate)">(none)</span>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -41,7 +62,13 @@ export default {
             </div>
         </div>
     </div>
+    {/if}
 </div>
+{#each record.children as child}
+<svelte:self record={child} 
+             isExpanded={false}
+             level={level+1}/>
+{/each}
 
 <style>
 
@@ -51,7 +78,6 @@ export default {
     border-color: var(--secondary75);
     border-radius: var(--borderradius);
     display: block;
-    margin:15px;
     box-shadow: -4px 2px 3px 0px var(--primary25);
     width: calc(100% - 30px);
 }
@@ -59,8 +85,16 @@ export default {
 .title {
     font: var(--bodytext);
     background-color: var(--secondary75);
-    padding: 15px;
+    padding: 3px 5px 7px 15px;
     color: var(--white);
+}
+
+.title-action {
+    padding:5px;
+    cursor:pointer;
+    display:inline-block;
+    position: relative;
+    top: 5px;
 }
 
 .inner {
@@ -93,6 +127,7 @@ export default {
     font: var(--smallbodytext);
     color: var(--slate);
     margin-left: 15px;
+    margin-right: 15px;
 }
 
 .inner-title {
