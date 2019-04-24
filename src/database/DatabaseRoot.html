@@ -1,11 +1,10 @@
 <script>
 
-import ComingSoon from "../common/ComingSoon.html";
-import RecordCard from "./RecordCard.html";
-
+import RecordRow from "./RecordRow.html";
+import RecordView from "./RecordView.html";
 export default {
     components: {
-        ComingSoon, RecordCard
+        RecordView, RecordRow
     },
 
     data() {
@@ -20,11 +19,70 @@ export default {
 
 </script>
 
-{#each $currentNode.children as record}
-<RecordCard record={record} />
-{/each}
+<div class="root">
+    <div class="heirarchy">
+        <div class="heirarchy-title-row">
+            <div class="heirarchy-title">Records</div>
+            <div class="heirarchy-add">
+                {@html $getIcon("plus")}
+            </div>
+        </div>
+        {#each $currentNode.children as record}
+        <RecordRow record={record} />
+        {/each}
+
+        <div class="heirarchy-title-row" style="margin-top: 20px">
+            <div class="heirarchy-title">Indexes</div>
+            <div class="heirarchy-add">
+                {@html $getIcon("plus")}
+            </div>
+        </div>
+    </div>
+    <div class="node-container">
+        {#if !$selectedNode}
+        <h1>nothing selected</h1>
+        {:else}
+        <RecordView record={$selectedNode} />
+        {/if}
+    </div>
+</div>
 
 
 <style>
+.root {
+    display: flex;
+    height: 100%;
+}
+
+.heirarchy {
+    flex: 0 1 auto;
+    width: 200px;
+    background-color: var(--primary25);
+}
+
+.node-container {
+    flex: 1 1 auto;
+}
+
+.heirarchy-title-row {
+    padding: 15px;
+    background-color: var(--secondary75);
+    color: var(--white);
+    font-size: 11pt;
+    display: flex;
+}
+
+.heirarchy-title {
+    flex: auto 1 1;
+}
+
+.heirarchy-add {
+    flex: auto 0 1;
+    cursor: pointer;
+    font-size: 13pt;
+    bottom: 5px;
+    position:relative;
+}
+
 
 </style>

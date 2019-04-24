@@ -15,7 +15,8 @@ const builderStore = new BuilderStore({
     heirarchy: {},
     currentNodeKey: "/",
     activeNav: "database",
-    getIcon: getIcon
+    getIcon: getIcon,
+    selectedNode: null
 });
 
 useLocalStorage(builderStore);
