@@ -17,6 +17,9 @@ export default {
 
 <div class="root" style="margin-left: {level * 30}px; margin-top: {level === 0 ? 30 : 3}px; width: calc(100% - {20 + (level * 30)}px)  ">
     <div class="title">
+        <div class="title-action">
+            {@html $getIcon("more-vertical")}
+        </div>
         {record.name}
         <span class="node-path">{record.nodeKey()}</span>
         <div class="title-action" on:click="set({isExpanded : !isExpanded})">
