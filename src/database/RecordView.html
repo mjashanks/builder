@@ -1,13 +1,18 @@
 <script>
 
+import Textbox from "../common/Textbox.html";
+
 export default {
+    components: { Textbox }
 };
 
 </script>
 
 <div class="root">
 
-    <h1>{record.name}</h1>
+    <Textbox label="Name" bind:text=record.name />
+    <Textbox label="Collection Name" text={record.collectionName} />
+    <Textbox label="Shard Factor" text={record.allidsShardFactor} />
 
 </div>
 
@@ -16,7 +21,7 @@ export default {
 
 .root {
     height: 100%;
-    padding: 20px;
+    padding: 15px;
 }
 
 </style>

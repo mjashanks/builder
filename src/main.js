@@ -1,6 +1,6 @@
 import App from './App.html';
 import store from "./builderStore/index.js";
-import '../assets/budibase-logo.png';
+import '../assets/budibase-logo-only.png';
 import '../assets/budibase-logo-white.png';
 import '../assets/lato-latin-ext.woff2';
 import '../assets/lato-latin.woff2';

@@ -1,10 +1,10 @@
 <script>
 
-import RecordRow from "./RecordRow.html";
+import HeirarchyRow from "./HeirarchyRow.html";
 import RecordView from "./RecordView.html";
 export default {
     components: {
-        RecordView, RecordRow
+        RecordView, HeirarchyRow
     },
 
     data() {
@@ -28,7 +28,7 @@ export default {
             </div>
         </div>
         {#each $currentNode.children as record}
-        <RecordRow record={record} />
+        <HeirarchyRow node={record} />
         {/each}
 
         <div class="heirarchy-title-row" style="margin-top: 20px">
@@ -37,6 +37,9 @@ export default {
                 {@html $getIcon("plus")}
             </div>
         </div>
+        {#each $currentNode.indexes as index}
+        <HeirarchyRow node={index} />
+        {/each}
     </div>
     <div class="node-container">
         {#if !$selectedNode}
@@ -52,12 +55,13 @@ export default {
 .root {
     display: flex;
     height: 100%;
+    position: relative;
 }
 
 .heirarchy {
     flex: 0 1 auto;
     width: 200px;
-    background-color: var(--primary25);
+    background-color: var(--slate);
 }
 
 .node-container {
@@ -65,11 +69,12 @@ export default {
 }
 
 .heirarchy-title-row {
-    padding: 15px;
-    background-color: var(--secondary75);
-    color: var(--white);
+    padding: 15px 7px;
+    /*background-color: var(--secondary75);
+    color: var(--white);*/
     font-size: 11pt;
     display: flex;
+    font-weight: bold;
 }
 
 .heirarchy-title {

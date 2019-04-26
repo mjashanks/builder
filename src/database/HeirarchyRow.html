@@ -6,24 +6,22 @@ export default {
             isExpanded:true,
             level:0
         })
-    },
-    computed: {
-        expandIcon:({isExpanded}) => 
-            isExpanded ? "chevron-down" : "chevron-right"
     }
 };
 
 </script>
 
 <div class="root">
-    <div class="title" on:click="$set({selectedNode:record})" style="padding-left: {20 + (level * 20)}px">
-        {record.name}
+    <div class="title" on:click="$set({selectedNode:node})" style="padding-left: {20 + (level * 20)}px">
+        {node.name}
     </div>
-    {#each record.children as child}
-    <svelte:self record={child} 
+    {#if node.children}
+    {#each node.children as child}
+    <svelte:self node={child} 
                     isExpanded={true}
                     level={level+1}/>
     {/each}
+    {/if}
 </div>
 
 
@@ -37,9 +35,6 @@ export default {
 }
 
 .title {
-    border-style: dotted;
-    border-width: 0px 0px 1px 0px;
-    border-color: var(--secondary10);
     font: var(--bodytext);
     padding-top: 10px;
     padding-right: 5px;

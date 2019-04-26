@@ -13,7 +13,7 @@ export default {
   },
 
   data : () => ({
-    navWidth: "200px"
+    navWidth: "50px"
   })
 };
 
@@ -23,21 +23,18 @@ export default {
   <Nav width={navWidth}/>
   <div class="content-wrapper" 
        style="width: calc(100% - {navWidth}); left: {navWidth}">
-    <div class="content-wrapper-inner">
-      <div class="header"></div>
-      <div class="content">    
-        {#if $activeNav === "database"}
-        <Database />
-        {:elseif $activeNav === "actions"}
-        <ActionsAndTriggers />
-        {:elseif $activeNav === "triggers"}
-        <ComingSoon name="Triggers"/>
-        {:elseif $activeNav === "access levels"}
-        <ComingSoon name="Access Levels" />
-        {:elseif $activeNav === "user interface"}
-        <UserInterface />
-        {/if}
-      </div>
+    <div class="content">    
+      {#if $activeNav === "database"}
+      <Database />
+      {:elseif $activeNav === "actions"}
+      <ActionsAndTriggers />
+      {:elseif $activeNav === "triggers"}
+      <ComingSoon name="Triggers"/>
+      {:elseif $activeNav === "access levels"}
+      <ComingSoon name="Access Levels" />
+      {:elseif $activeNav === "user interface"}
+      <UserInterface />
+      {/if}
     </div>
   </div>
 </div>
@@ -49,10 +46,6 @@ export default {
     height: 100%;
 	}
   
-  .content-wrapper-inner {
-    background-color: var(--secondary100);
-    height: 100%;
-  }
 
   .content-wrapper {
     position: fixed;
@@ -60,16 +53,11 @@ export default {
   }
 
   .content {
-    border-radius: 10px 0 0 0;
     background-color: var(--white);
-    overflow:scroll;
+    overflow-y:scroll;
     top:10px;
     height: 100%;
   }
 
-  .header {
-    height:5px;
-    background: var(--secondary100);
-  }
 
 </style>
