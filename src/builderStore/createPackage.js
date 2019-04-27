@@ -1,9 +1,7 @@
  
-export const createNewPackage = store => {
-    store.set({
-        hasAppPackage:true,
-        heirarchy: testroot
-    });
+export const createPackage = (hasAppPackage, heirarchy) => {
+    hasAppPackage.set(true);
+    heirarchy.set(testroot);
 };
 
 const testroot = {

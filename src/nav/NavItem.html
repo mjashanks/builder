@@ -1,27 +1,29 @@
 <script>
 
-export default {
-    computed: {
-        navActive : ({$activeNav, name}) =>
-            name === $activeNav ? "active" : ""        
-    
-    },
-    methods: {
-        setActive () {
-            this.store.set({activeNav:this.get().name})
-        }
-    },
-    data: () => ({
-        name: "", label: "", icon: ""
-    })
-};
+import {activeNav} from "../builderStore";
+import getIcon from "../common/icon";
+
+export let name = "";
+export let label = "";
+export let icon = "";
+
+let navActive = "";
+
+activeNav.subscribe(a => {
+    navActive = (a === name ? "active" : "")
+});
+
+const setActive = () => 
+    activeNav.set(name);
 
 </script>
 
-<div class="nav-item {navActive}" 
-     on:click="setActive()">
-     <div class="inner">
-        <div class="icon">{@html $getIcon(icon)}</div>
+<div class="{navActive}">
+    <div class="nav-item" 
+        on:click={setActive}>
+        <div class="inner">
+            <div class="icon">{@html getIcon(icon)}</div>
+        </div>
     </div>
 </div>
 
@@ -53,14 +55,18 @@ export default {
     margin-right:5px;
 }
 
-.active {
+.active > div {
+    background-color: var(--primary10);
+    color: var(--secondary100);
+}
+
+.active>div:hover {
     background-color: var(--slate);
     color: var(--secondary100);
 }
 
-.active:hover {
-    background-color: var(--slate);
-    color: var(--secondary100);
+.active {
+    background-color: white; 
 }
 
 

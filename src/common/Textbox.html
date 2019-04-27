@@ -1,10 +1,11 @@
 <script>
-
+export let text = "";
+export let label = "";
 </script>
 
 <div class="container">
     <div class="label">{label}</div>
-    <input class="control" bind:value=text >
+    <input class="control" bind:value={text} >
 </div>
 
 <style>

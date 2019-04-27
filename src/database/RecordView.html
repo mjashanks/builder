@@ -2,15 +2,13 @@
 
 import Textbox from "../common/Textbox.html";
 
-export default {
-    components: { Textbox }
-};
+export let record = null;
 
 </script>
 
 <div class="root">
 
-    <Textbox label="Name" bind:text=record.name />
+    <Textbox label="Name" bind:text={record.name} />
     <Textbox label="Collection Name" text={record.collectionName} />
     <Textbox label="Shard Factor" text={record.allidsShardFactor} />
 

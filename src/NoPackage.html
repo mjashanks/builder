@@ -1,12 +1,8 @@
 <script>
 
 import Button from "./common/Button.html"
+import {createNewPackage} from "./builderStore";
 
-export default {
-    components: {
-        Button
-    }
-};
 
 </script>
 
@@ -18,7 +14,7 @@ export default {
             <div>
                 <h4 style="margin-bottom: 20px">What would you like to do?</h4>
                 <Button color="primary"
-                        on:click="$createNewPackage()"
+                        on:click={createNewPackage}
                         class="option">
                     Create a New Package
                 </Button>

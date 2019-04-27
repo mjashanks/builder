@@ -1,18 +1,12 @@
 <script>
 
-export default {
-    data() {
-        return {
-            color:"primary",
-            class: "",
-            style: ""
-        }
-    }
-}
+export let color = "primary";
+export let className = "";
+export let style = "";
 
 </script>
 
-<button class="{color} {class}" 
+<button class="{color} {className}" 
         on:click
         style="{style}">
     <slot/>

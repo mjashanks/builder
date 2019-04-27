@@ -1,15 +1,17 @@
 {
-  "name": "svelte-app",
+  "name": "budibase-builder",
   "version": "1.0.0",
+  "license": "GPL-3.0",
   "devDependencies": {
     "cross-env": "^5.1.5",
     "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^3.0.1",
     "mini-css-extract-plugin": "^0.4.0",
     "serve": "^10.0.2",
     "style-loader": "^0.23.1",
-    "svelte": "^2.0.0",
-    "svelte-loader": "2.11.0",
+    "svelte": "^3.1.0",
+    "svelte-loader": "2.13.3",
     "webpack": "^4.8.3",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"

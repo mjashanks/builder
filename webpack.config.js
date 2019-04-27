@@ -24,10 +24,8 @@ module.exports = {
 				use: {
 					loader: 'svelte-loader',
 					options: {
-						skipIntroByDefault: true,
-						nestedTransitions: true,
 						emitCss: true,
-						hotReload: true
+						hotReload:true
 					}
 				}
 			},
