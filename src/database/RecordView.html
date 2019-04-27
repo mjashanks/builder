@@ -1,16 +1,85 @@
 <script>
 
 import Textbox from "../common/Textbox.html";
+import getIcon from "../common/icon";
+import {map, join, find} from "lodash/fp";
+import {heirarchy} from "../builderStore";
+import {common, heirarchy as h} from "budibase-core";
+const chain = common.$;
 
 export let record = null;
+let getIndexAllowedRecords;
+
+heirarchy.subscribe($heir => {
+    const flattened = h.getFlattenedHierarchy($heir);
+    getIndexAllowedRecords = index => 
+        chain(index.allowedRecordNodeIds, [
+            map(id => find(n => n.recordNodeId === id)
+                          (flattened).name),
+            join(", ")
+        ]);
+})
+
 
 </script>
 
 <div class="root">
 
     <Textbox label="Name" bind:text={record.name} />
+    {#if !record.isSingle}
     <Textbox label="Collection Name" text={record.collectionName} />
     <Textbox label="Shard Factor" text={record.allidsShardFactor} />
+    {/if}
+
+    <h4>Fields</h4>
+
+    <table class="fields-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each record.fields as field}
+            <tr>
+                <td class="edit-button">{@html getIcon("edit")}</td>
+                <td >
+                    <div>{field.label}</div>
+                    <div style="font-size: 0.7em; color: var(--slate)">{field.name}</div>
+                </td>
+                <td >{field.type}</td>
+                <td ></td>
+            </tr>
+            {/each}
+        </tbody>
+    </table>
+
+    <h4>Indexes</h4>
+
+    {#each record.indexes as index}
+    <div class="index-container">
+        <div class="index-name">{index.name}</div>
+        <div class="index-field-row">
+            <span class="index-label">records indexed: </span> 
+            <span>{getIndexAllowedRecords(index)}</span>
+            <span class="index-label" style="margin-left: 15px">type:</span> 
+            <span>{index.indexType}</span>
+        </div>
+        <div class="index-field-row">
+            <span class="index-label">map:</span>
+            <code class="index-mapfilter">{index.map}</code>
+        </div>
+        {#if index.filter}
+        <div class="index-field-row">
+            <span class="index-label">filter:</span>
+            <code class="index-mapfilter">{index.filter}</code>
+        </div>
+        {/if}
+    </div>
+    {/each}
 
 </div>
 
@@ -20,6 +89,80 @@ export let record = null;
 .root {
     height: 100%;
     padding: 15px;
+}
+
+.fields-table {
+    margin:10px;
+    border-collapse:collapse;
+}
+
+.edit-button {
+    cursor:pointer;
+    color: var(--white);
+}
+
+.edit-button:hover {
+    color: var(--secondary75);
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    padding: 5px 30px 5px 0px;
+    margin:0;
+    
+}
+
+thead > tr {
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: var(--secondary75);
+    margin-bottom: 20px;
+}
+
+tbody > tr {
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: var(--primary10);
+}
+
+tbody > tr:hover {
+    background-color: var(--primary10);
+}
+
+tbody > tr:hover > .edit-button {
+    color: var(--secondary75);
+}
+
+.index-container {
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    border-color: var(--secondary25);
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.index-label {
+    color: var(--slate);
+}
+
+.index-name {
+    font-weight: bold;
+    color: var(--primary100);
+}
+
+.index-container code {
+    margin: 0;
+    display: inline;
+    background-color: var(--primary10);
+    color: var(--secondary100);
+    padding:3px;
+}
+
+.index-field-row {
+    margin-top: 7px;
 }
 
 </style>

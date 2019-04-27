@@ -1,7 +1,8 @@
  
-export const createPackage = (hasAppPackage, heirarchy) => {
+export const createPackage = (hasAppPackage, heirarchy, selectedNode) => {
     hasAppPackage.set(true);
     heirarchy.set(testroot);
+    selectedNode.set(testroot.children[1]);
 };
 
 const testroot = {
