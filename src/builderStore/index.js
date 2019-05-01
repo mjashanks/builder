@@ -1,21 +1,20 @@
 import {bbWritable} from "./useLocalStorage";
 import {createPackage} from "./createPackage";
-import currentNode from "./currentNode";
+import {getCurrentNode, getSaveSelectedNode} from "./currentNode";
+import {constructHierarchy} from "./currentNode";
 
-export const heirarchy = bbWritable("heirarchy", null);
+export const hierarchy = bbWritable("hierarchy", null, constructHierarchy);
 export const hasAppPackage = bbWritable("hasAppPackage", false);
-export const selectedNode = bbWritable("selectedNode", null);
-
-
+export const selectedNodeId = bbWritable("selectedNodeId", "");
+//selectedNode.subscribe(constructHierarchy);
 
 export const createNewPackage = () =>
-    createPackage(hasAppPackage, heirarchy, selectedNode);
+    createPackage(hasAppPackage, hierarchy, selectedNodeId);
 
-export const currentNodeKey = bbWritable("currentNodeKey","");
 export const activeNav = bbWritable("activeNav", "database");
-
+export const editingNewNode = bbWritable("editingNewNode", false);
 //useLocalStorage(builderStore);
-currentNode(heirarchy, currentNodeKey);
-
+export const currentNode = getCurrentNode(hierarchy, selectedNodeId, editingNewNode);
+export const saveSelectedNode = getSaveSelectedNode(hierarchy, currentNode, selectedNodeId);
 
 

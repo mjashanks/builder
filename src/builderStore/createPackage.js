@@ -1,8 +1,10 @@
- 
-export const createPackage = (hasAppPackage, heirarchy, selectedNode) => {
+import {constructHierarchy} from "./currentNode";
+
+export const createPackage = (hasAppPackage, hierarchy, selectedNodeId) => {
     hasAppPackage.set(true);
-    heirarchy.set(testroot);
-    selectedNode.set(testroot.children[1]);
+    const root = constructHierarchy(testroot);
+    hierarchy.set(root);
+    selectedNodeId.set(testroot.children[1].nodeId);
 };
 
 const testroot = {
@@ -28,7 +30,7 @@ const testroot = {
       ],
       "children": [],
       "validationRules": [],
-      "recordNodeId": 0,
+      "nodeId": 1,
       "indexes": [],
       "allidsShardFactor": 64,
       "collectionName": "",
@@ -98,7 +100,7 @@ const testroot = {
             "indexNodeKey": "/partnersReference",
             "displayValue": "name",
             "reverseIndexNodeKeys": [
-              "/partners/2-{id}/partnerCustomers"
+              "/partners/4-{id}/partnerCustomers"
             ]
           },
           "label": "partner",
@@ -112,7 +114,7 @@ const testroot = {
             "indexNodeKey": "/customer_index",
             "displayValue": "surname",
             "reverseIndexNodeKeys": [
-              "/customers/1-{id}/referredToCustomers"
+              "/customers/2-{id}/referredToCustomers"
             ]
           },
           "label": "referredBy",
@@ -188,7 +190,7 @@ const testroot = {
               "typeOptions": {
                 "indexNodeKey": "/customersReference",
                 "reverseIndexNodeKeys": [
-                  "/customers/1-{id}/invoice_index"
+                  "/customers/2-{id}/invoice_index"
                 ],
                 "displayValue": "name"
               },
@@ -219,10 +221,10 @@ const testroot = {
                   "type": "reference",
                   "typeOptions": {
                     "reverseIndexNodeKeys": [
-                      "/partners/2-{id}/invoices/3-{id}/partnerCharges"
+                      "/partners/4-{id}/invoices/6-{id}/partnerCharges"
                     ],
                     "displayValue": "createdDate",
-                    "indexNodeKey": "/partners/2-{id}/partnerInvoices_index"
+                    "indexNodeKey": "/partners/4-{id}/partnerInvoices_index"
                   },
                   "label": "partnerInvoice",
                   "getInitialValue": "default",
@@ -231,7 +233,7 @@ const testroot = {
               ],
               "children": [],
               "validationRules": [],
-              "recordNodeId": 5,
+              "nodeId": 10,
               "indexes": [],
               "allidsShardFactor": 1,
               "collectionName": "charges",
@@ -239,7 +241,7 @@ const testroot = {
             }
           ],
           "validationRules": [],
-          "recordNodeId": 4,
+          "nodeId": 8,
           "indexes": [
             {
               "name": "charge_index",
@@ -251,8 +253,9 @@ const testroot = {
               "getSortKey": "record.id",
               "aggregateGroups": [],
               "allowedRecordNodeIds": [
-                5
-              ]
+                10
+              ],
+              "nodeId": 11
             }
           ],
           "allidsShardFactor": 1,
@@ -261,7 +264,7 @@ const testroot = {
         }
       ],
       "validationRules": [],
-      "recordNodeId": 1,
+      "nodeId": 2,
       "indexes": [
         {
           "name": "invoice_index",
@@ -273,8 +276,9 @@ const testroot = {
           "getSortKey": "record.id",
           "aggregateGroups": [],
           "allowedRecordNodeIds": [
-            4
-          ]
+            8
+          ],
+          "nodeId": 9
         },
         {
           "name": "referredToCustomers",
@@ -286,8 +290,9 @@ const testroot = {
           "getSortKey": "record.id",
           "aggregateGroups": [],
           "allowedRecordNodeIds": [
-            1
-          ]
+            2
+          ],
+          "nodeId": 14
         },
         {
           "name": "invoicesByOutstanding",
@@ -308,13 +313,15 @@ const testroot = {
                   "aggregatedValue": "return record.totalIncVat"
                 }
               ],
-              "condition": ""
+              "condition": "",
+              "nodeId": 26
             }
           ],
           "allowedRecordNodeIds": [
-            3,
-            4
-          ]
+            6,
+            8
+          ],
+          "nodeId": 25
         }
       ],
       "allidsShardFactor": 64,
@@ -381,7 +388,7 @@ const testroot = {
           ],
           "children": [],
           "validationRules": [],
-          "recordNodeId": 3,
+          "nodeId": 6,
           "indexes": [
             {
               "name": "partnerCharges",
@@ -414,10 +421,10 @@ const testroot = {
                       "type": "reference",
                       "typeOptions": {
                         "reverseIndexNodeKeys": [
-                          "/partners/2-{id}/invoices/3-{id}/partnerCharges"
+                          "/partners/4-{id}/invoices/6-{id}/partnerCharges"
                         ],
                         "displayValue": "createdDate",
-                        "indexNodeKey": "/partners/2-{id}/partnerInvoices_index"
+                        "indexNodeKey": "/partners/4-{id}/partnerInvoices_index"
                       },
                       "label": "partnerInvoice",
                       "getInitialValue": "default",
@@ -426,13 +433,14 @@ const testroot = {
                   ],
                   "children": [],
                   "validationRules": [],
-                  "recordNodeId": 5,
+                  "nodeId": 10,
                   "indexes": [],
                   "allidsShardFactor": 1,
                   "collectionName": "charges",
                   "isSingle": false
                 }
-              ]
+              ],
+              "nodeId": 15
             }
           ],
           "allidsShardFactor": 1,
@@ -441,7 +449,7 @@ const testroot = {
         }
       ],
       "validationRules": [],
-      "recordNodeId": 2,
+      "nodeId": 4,
       "indexes": [
         {
           "name": "partnerInvoices_index",
@@ -453,8 +461,9 @@ const testroot = {
           "getSortKey": "record.id",
           "aggregateGroups": [],
           "allowedRecordNodeIds": [
-            3
-          ]
+            6
+          ],
+          "nodeId": 7
         },
         {
           "name": "partnerCustomers",
@@ -466,8 +475,9 @@ const testroot = {
           "getSortKey": "record.id",
           "aggregateGroups": [],
           "allowedRecordNodeIds": [
-            1
-          ]
+            2
+          ],
+          "nodeId": 13
         }
       ],
       "allidsShardFactor": 64,
@@ -496,12 +506,14 @@ const testroot = {
               "aggregatedValue": "return record.age"
             }
           ],
-          "condition": ""
+          "condition": "",
+          "nodeId": 24
         }
       ],
       "allowedRecordNodeIds": [
-        1
-      ]
+        2
+      ],
+      "nodeId": 3
     },
     {
       "name": "partner_index",
@@ -513,8 +525,9 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        2
-      ]
+        4
+      ],
+      "nodeId": 5
     },
     {
       "name": "partnersReference",
@@ -526,8 +539,9 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        2
-      ]
+        4
+      ],
+      "nodeId": 12
     },
     {
       "name": "customersReference",
@@ -539,8 +553,9 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        1
-      ]
+        2
+      ],
+      "nodeId": 16
     },
     {
       "name": "deceased",
@@ -552,8 +567,9 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        1
-      ]
+        2
+      ],
+      "nodeId": 17
     },
     {
       "name": "customer_invoices",
@@ -565,8 +581,9 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        4
-      ]
+        8
+      ],
+      "nodeId": 18
     },
     {
       "name": "Outstanding Invoices",
@@ -582,7 +599,8 @@ const testroot = {
           "type": "aggregateGroup",
           "groupBy": "",
           "aggregates": [],
-          "condition": ""
+          "condition": "",
+          "nodeId": 20
         },
         {
           "name": "all_invoices_by_type",
@@ -598,7 +616,8 @@ const testroot = {
               "aggregatedValue": "return record.paidAmount"
             }
           ],
-          "condition": ""
+          "condition": "",
+          "nodeId": 21
         },
         {
           "name": "written_off",
@@ -610,13 +629,15 @@ const testroot = {
               "aggregatedValue": "return record.totalIncVat"
             }
           ],
-          "condition": "record.isWrittenOff === true"
+          "condition": "record.isWrittenOff === true",
+          "nodeId": 22
         }
       ],
       "allowedRecordNodeIds": [
-        4,
-        3
-      ]
+        8,
+        6
+      ],
+      "nodeId": 19
     },
     {
       "name": "customersBySurname",
@@ -628,8 +649,10 @@ const testroot = {
       "getSortKey": "record.id",
       "aggregateGroups": [],
       "allowedRecordNodeIds": [
-        1
-      ]
+        2
+      ],
+      "nodeId": 23
     }
-  ]
-};
+  ],
+  "nodeId": 0
+}

@@ -1,7 +1,7 @@
 {
   "name": "budibase-builder",
   "version": "1.0.0",
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "cross-env": "^5.1.5",
     "css-loader": "^1.0.0",

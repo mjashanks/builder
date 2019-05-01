@@ -1,39 +1,78 @@
 <script>
 
-import HeirarchyRow from "./HeirarchyRow.html";
+import HierarchyRow from "./HierarchyRow.html";
 import RecordView from "./RecordView.html";
-import {heirarchy, selectedNode} from "../builderStore";
+import {hierarchy, selectedNodeId, currentNode} from "../builderStore";
 import getIcon from "../common/icon";
+import DropdownButton from "../common/DropdownButton.html";
+import {hierarchy as hierarchyFunctions} from "budibase-core";
+import {makeNewChildRecord, makeNewChildIndex, 
+    NewRootRecord, NewRootIndex} from "../builderStore/currentNode";
+
+const defaultNewIndexActions = [{
+    label:"New Root Index", 
+    onclick: () => selectedNodeId.set(NewRootIndex)
+}];
+
+const defaultNewRecordActions = [{
+    label:"New Root Record", 
+    onclick: () => selectedNodeId.set(NewRootRecord)
+}];
+
+let newIndexActions = defaultNewIndexActions;
+let newRecordActions = defaultNewRecordActions;
+
+currentNode.subscribe(n => {
+    if(hierarchyFunctions.isIndex(n)) {
+        newIndexActions = [
+            ...defaultNewIndexActions,
+            {label: `New Index on ${n.name}`, 
+            onclick: () => selectedNodeId.set(
+                makeNewChildIndex(n.nodeId))
+        }
+        ];
+
+        newRecordActions = defaultNewRecordActions;
+
+    } else {
+        newRecordActions = [
+            ...defaultNewRecordActions,
+            {label: `New Child Record of ${n.name}`, 
+            onclick: () => selectedNodeId.set(
+                makeNewChildRecord(n.nodeId))
+        }
+        ];
+
+        newIndexActions = defaultNewIndexActions;
+    }
+});
+
 
 </script>
 
 <div class="root">
-    <div class="heirarchy">
-        <div class="heirarchy-title-row">
-            <div class="heirarchy-title">Records</div>
-            <div class="heirarchy-add">
-                {@html getIcon("plus")}
-            </div>
+    <div class="hierarchy">
+        <div class="hierarchy-title-row">
+            <div class="hierarchy-title">Records</div>
+            <DropdownButton iconName="plus" actions={newRecordActions} />
         </div>
-        {#each $heirarchy.children as record}
-        <HeirarchyRow node={record} />
+        {#each $hierarchy.children as record}
+        <HierarchyRow node={record} />
         {/each}
 
-        <div class="heirarchy-title-row" style="margin-top: 20px">
-            <div class="heirarchy-title">Indexes</div>
-            <div class="heirarchy-add">
-                {@html getIcon("plus")}
-            </div>
+        <div class="hierarchy-title-row" style="margin-top: 20px">
+            <div class="hierarchy-title">Indexes</div>
+            <DropdownButton iconName="plus" actions={newIndexActions} />
         </div>
-        {#each $heirarchy.indexes as index}
-        <HeirarchyRow node={index} />
+        {#each $hierarchy.indexes as index}
+        <HierarchyRow node={index} />
         {/each}
     </div>
     <div class="node-container">
-        {#if !$selectedNode}
+        {#if !$currentNode}
         <h1>nothing selected</h1>
         {:else}
-        <RecordView record={$selectedNode} />
+        <RecordView record={$currentNode} />
         {/if}
     </div>
 </div>
@@ -46,7 +85,7 @@ import getIcon from "../common/icon";
     position: relative;
 }
 
-.heirarchy {
+.hierarchy {
     flex: 0 1 auto;
     width: 200px;
     background-color: var(--primary10);
@@ -59,7 +98,7 @@ import getIcon from "../common/icon";
     overflow-y: auto;
 }
 
-.heirarchy-title-row {
+.hierarchy-title-row {
     padding: 15px 7px;
     /*background-color: var(--secondary75);
     color: var(--white);*/
@@ -68,16 +107,8 @@ import getIcon from "../common/icon";
     font-weight: bold;
 }
 
-.heirarchy-title {
+.hierarchy-title {
     flex: auto 1 1;
-}
-
-.heirarchy-add {
-    flex: auto 0 1;
-    cursor: pointer;
-    font-size: 13pt;
-    bottom: 5px;
-    position:relative;
 }
 
 

@@ -1,63 +1,102 @@
 <script>
 
 import Textbox from "../common/Textbox.html";
+import Button from "../common/Button.html";
 import getIcon from "../common/icon";
-import {map, join, find} from "lodash/fp";
-import {heirarchy} from "../builderStore";
-import {common, heirarchy as h} from "budibase-core";
+import {map, join, find, keys, isDate} from "lodash/fp";
+import {hierarchy, 
+    saveSelectedNode, editingNewNode } from "../builderStore";
+import {common, hierarchy as h} from "budibase-core";
 const chain = common.$;
 
-export let record = null;
+export let record;
 let getIndexAllowedRecords;
 
-heirarchy.subscribe($heir => {
+hierarchy.subscribe($heir => {
     const flattened = h.getFlattenedHierarchy($heir);
     getIndexAllowedRecords = index => 
         chain(index.allowedRecordNodeIds, [
-            map(id => find(n => n.recordNodeId === id)
+            map(id => find(n => n.nodeId === id)
                           (flattened).name),
             join(", ")
         ]);
 })
+
+let getTypeOptionsValueText = value => {
+    if(value === Number.MAX_SAFE_INTEGER
+       || value === Number.MIN_SAFE_INTEGER
+       || new Date(value).getTime() === new Date(8640000000000000).getTime()
+       || new Date(value).getTime() === new Date(-8640000000000000).getTime()) return "(any)";
+    
+    if(value === null) return "(not set)";
+    return value;
+}
+
+let getTypeOptions = typeOptions => 
+    chain(typeOptions, [
+        keys,
+        map(k => `<span style="color:var(--slate)">${k}: </span>${getTypeOptionsValueText(typeOptions[k])}`),
+        join("<br>")
+    ]);
 
 
 </script>
 
 <div class="root">
 
+    <div>
+        <Button on:click={saveSelectedNode}>
+            {#if $editingNewNode}
+            Create
+            {:else}
+            Update
+            {/if}
+        </Button>
+    </div>
+
     <Textbox label="Name" bind:text={record.name} />
+    <div>{record.nodeKey()}</div>
     {#if !record.isSingle}
-    <Textbox label="Collection Name" text={record.collectionName} />
-    <Textbox label="Shard Factor" text={record.allidsShardFactor} />
+    <Textbox label="Collection Name" bind:text={record.collectionName} />
+    <Textbox label="Shard Factor" bind:text={record.allidsShardFactor} />
     {/if}
 
-    <h4>Fields</h4>
+    <h4>
+        Fields <span style="margin-left:15px">{@html getIcon("plus")}</span>
+    </h4>
 
+    {#if record.fields.length > 0}
     <table class="fields-table">
         <thead>
             <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Options</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {#each record.fields as field}
             <tr>
-                <td class="edit-button">{@html getIcon("edit")}</td>
                 <td >
                     <div>{field.label}</div>
                     <div style="font-size: 0.7em; color: var(--slate)">{field.name}</div>
                 </td>
                 <td >{field.type}</td>
-                <td ></td>
+                <td >{@html getTypeOptions(field.typeOptions)}</td>
+                <td class="edit-button">{@html getIcon("edit")}</td>
             </tr>
             {/each}
         </tbody>
     </table>
+    {:else}
+    (no fields added)
+    {/if}
 
-    <h4>Indexes</h4>
+
+    <h4>
+        Indexes <span style="margin-left:15px; color:var(--primary100)">{@html getIcon("plus")}</span>
+    </h4>
 
     {#each record.indexes as index}
     <div class="index-container">
@@ -79,6 +118,8 @@ heirarchy.subscribe($heir => {
         </div>
         {/if}
     </div>
+    {:else}
+    (no indexes added)
     {/each}
 
 </div>
