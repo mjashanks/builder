@@ -4,16 +4,15 @@ import Textbox from "../common/Textbox.html";
 import Button from "../common/Button.html";
 import getIcon from "../common/icon";
 import {map, join, find, keys, isDate} from "lodash/fp";
-import {hierarchy, 
-    saveSelectedNode, editingNewNode } from "../builderStore";
+import { database } from "../builderStore";
 import {common, hierarchy as h} from "budibase-core";
 const chain = common.$;
 
 export let record;
 let getIndexAllowedRecords;
 
-hierarchy.subscribe($heir => {
-    const flattened = h.getFlattenedHierarchy($heir);
+database.subscribe($database => {
+    const flattened = h.getFlattenedHierarchy($database.hierarchy);
     getIndexAllowedRecords = index => 
         chain(index.allowedRecordNodeIds, [
             map(id => find(n => n.nodeId === id)
@@ -45,8 +44,8 @@ let getTypeOptions = typeOptions =>
 <div class="root">
 
     <div>
-        <Button on:click={saveSelectedNode}>
-            {#if $editingNewNode}
+        <Button on:click={database.saveCurrentNode}>
+            {#if $database.currentNodeIsNew}
             Create
             {:else}
             Update

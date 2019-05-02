@@ -1,10 +1,9 @@
 import {constructHierarchy} from "./currentNode";
 
-export const createPackage = (hasAppPackage, hierarchy, selectedNodeId) => {
+export const createPackage = (hasAppPackage, database) => {
     hasAppPackage.set(true);
     const root = constructHierarchy(testroot);
-    hierarchy.set(root);
-    selectedNodeId.set(testroot.children[1].nodeId);
+    database.importHierarchy(root);
 };
 
 const testroot = {

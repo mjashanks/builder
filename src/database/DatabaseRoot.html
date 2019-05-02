@@ -2,48 +2,46 @@
 
 import HierarchyRow from "./HierarchyRow.html";
 import RecordView from "./RecordView.html";
-import {hierarchy, selectedNodeId, currentNode} from "../builderStore";
+import IndexView from "./IndexView.html";
+import {database} from "../builderStore";
 import getIcon from "../common/icon";
 import DropdownButton from "../common/DropdownButton.html";
 import {hierarchy as hierarchyFunctions} from "budibase-core";
 import {makeNewChildRecord, makeNewChildIndex, 
     NewRootRecord, NewRootIndex} from "../builderStore/currentNode";
 
-const defaultNewIndexActions = [{
+const defaultNewIndexActions =  [{
     label:"New Root Index", 
-    onclick: () => selectedNodeId.set(NewRootIndex)
+    onclick: database.newRootIndex
 }];
 
 const defaultNewRecordActions = [{
     label:"New Root Record", 
-    onclick: () => selectedNodeId.set(NewRootRecord)
+    onclick: database.newRootRecord
 }];
 
 let newIndexActions = defaultNewIndexActions;
 let newRecordActions = defaultNewRecordActions;
 
-currentNode.subscribe(n => {
-    if(hierarchyFunctions.isIndex(n)) {
-        newIndexActions = [
-            ...defaultNewIndexActions,
-            {label: `New Index on ${n.name}`, 
-            onclick: () => selectedNodeId.set(
-                makeNewChildIndex(n.nodeId))
-        }
-        ];
+database.subscribe(db => {
+    if(hierarchyFunctions.isIndex(db.currentNode)) {
+        
 
         newRecordActions = defaultNewRecordActions;
+        newIndexActions = defaultNewIndexActions;
 
     } else {
         newRecordActions = [
             ...defaultNewRecordActions,
-            {label: `New Child Record of ${n.name}`, 
-            onclick: () => selectedNodeId.set(
-                makeNewChildRecord(n.nodeId))
-        }
+            {label: `New Child Record of ${db.currentNode.name}`, 
+            onclick: database.newChildRecord}
         ];
 
-        newIndexActions = defaultNewIndexActions;
+        newIndexActions = [
+            ...defaultNewIndexActions,
+            {label: `New Index on ${db.currentNode.name}`, 
+            onclick: database.newChildIndex}
+        ];
     }
 });
 
@@ -56,7 +54,7 @@ currentNode.subscribe(n => {
             <div class="hierarchy-title">Records</div>
             <DropdownButton iconName="plus" actions={newRecordActions} />
         </div>
-        {#each $hierarchy.children as record}
+        {#each $database.hierarchy.children as record}
         <HierarchyRow node={record} />
         {/each}
 
@@ -64,15 +62,17 @@ currentNode.subscribe(n => {
             <div class="hierarchy-title">Indexes</div>
             <DropdownButton iconName="plus" actions={newIndexActions} />
         </div>
-        {#each $hierarchy.indexes as index}
+        {#each $database.hierarchy.indexes as index}
         <HierarchyRow node={index} />
         {/each}
     </div>
     <div class="node-container">
-        {#if !$currentNode}
+        {#if !$database.currentNode}
         <h1>nothing selected</h1>
+        {:else if $database.currentNode.type === "record"}
+        <RecordView record={$database.currentNode} />
         {:else}
-        <RecordView record={$currentNode} />
+        <IndexView index={$database.currentNode} />
         {/if}
     </div>
 </div>

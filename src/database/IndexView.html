@@ -1,0 +1,65 @@
+<script>
+
+import Textbox from "../common/Textbox.html";
+import CodeArea from "../common/CodeArea.html";
+import Button from "../common/Button.html";
+import {database} from "../builderStore";
+import {filter, some} from "lodash/fp";
+import {hierarchy as hierarchyFunctions, common} from "budibase-core";
+
+const chain = common.$;
+
+export let index;
+let indexableRecords = [];
+
+database.subscribe($database => {
+    indexableRecords = chain($database.hierarchy,[
+        hierarchyFunctions.getFlattenedHierarchy,
+        filter(hierarchyFunctions.isDecendant(index.parent())),
+        filter(hierarchyFunctions.isRecord)
+    ]);
+});
+
+const toggleAllowedRecord = record => {
+    if(some(id => id === record.nodeId)(index.allowedRecordNodeIds)) {
+        index.allowedRecordNodeIds = filter(id => id !== record.nodeId)
+                                           (index.allowedRecordNodeIds);
+    } else {
+        index.allowedRecordNodeIds.push(record.nodeId);
+    }
+};
+
+</script>
+
+<div class="root">
+    <Textbox bind:text={index.name} label="Name"/>
+    
+    <div class="allowed-records">
+        <div>Records to Index</div>
+        {#each indexableRecords as rec}
+        <input type="checkbox" on:change={() => toggleAllowedRecord(rec)}/>
+        <span>{rec.name}</span>
+        {/each}
+    </div>
+
+    <CodeArea bind:text={index.map} label="Map"/>
+    <CodeArea bind:text={index.filter} label="Filter"/>
+
+</div>
+
+<style>
+
+.root {
+    height: 100%;
+    padding: 15px;
+}
+
+.allowed-records {
+    margin: 20px 0px;
+}
+
+.allowed-records > span {
+    margin-right:30px;
+}
+
+</style>
