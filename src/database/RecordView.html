@@ -8,10 +8,11 @@ import { database } from "../builderStore";
 import {common, hierarchy as h} from "budibase-core";
 const chain = common.$;
 
-export let record;
+let record;
 let getIndexAllowedRecords;
 
 database.subscribe($database => {
+    record = $database.currentNode;
     const flattened = h.getFlattenedHierarchy($database.hierarchy);
     getIndexAllowedRecords = index => 
         chain(index.allowedRecordNodeIds, [
@@ -42,16 +43,6 @@ let getTypeOptions = typeOptions =>
 </script>
 
 <div class="root">
-
-    <div>
-        <Button on:click={database.saveCurrentNode}>
-            {#if $database.currentNodeIsNew}
-            Create
-            {:else}
-            Update
-            {/if}
-        </Button>
-    </div>
 
     <Textbox label="Name" bind:text={record.name} />
     <div>{record.nodeKey()}</div>

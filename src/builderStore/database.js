@@ -29,6 +29,7 @@ export default () => {
     writable.newRootIndex = newIndex(writable, true);
     writable.saveCurrentNode = saveCurrentNode(writable);
     writable.importHierarchy = importHierarchy(writable);
+    writable.deleteCurrentNode = deleteCurrentNode(writable);
     return writable;
 }     
 
@@ -53,6 +54,7 @@ const selectExistingNode = (databaseStore) => (nodeId) => {
         db.currentNode = getNode(
             db.hierarchy, nodeId
         );
+        db.currentNodeIsNew = false;
         return db;
     })
 }
@@ -108,6 +110,24 @@ const importHierarchy = databaseStore => hierarchy => {
         return db;
     })
 } 
+
+const deleteCurrentNode = databaseStore => () => {
+    databaseStore.update(db => {
+        const nodeToDelete = getNode(db.hierarchy, db.currentNode.nodeId);
+        db.currentNode = hierarchyFunctions.isRoot(nodeToDelete.parent())
+                         ? find(n => n != db.currentNode)
+                               (db.hierarchy.children)
+                         : nodeToDelete.parent();
+        if(hierarchyFunctions.isRecord(nodeToDelete)) {
+            nodeToDelete.parent().children = filter(c => c.nodeId !== nodeToDelete.nodeId)
+                                                   (nodeToDelete.parent().children);
+        } else {
+            nodeToDelete.parent().indexes = filter(c => c.nodeId !== nodeToDelete.nodeId)
+                                                   (nodeToDelete.parent().indexes);
+        }
+        return db;
+    });
+}
 
 const getNode = (hierarchy, nodeId) => 
     chain(hierarchy, [

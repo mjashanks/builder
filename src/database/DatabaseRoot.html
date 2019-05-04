@@ -3,12 +3,15 @@
 import HierarchyRow from "./HierarchyRow.html";
 import RecordView from "./RecordView.html";
 import IndexView from "./IndexView.html";
+import ActionsHeader from "./ActionsHeader.html";
 import {database} from "../builderStore";
 import getIcon from "../common/icon";
 import DropdownButton from "../common/DropdownButton.html";
 import {hierarchy as hierarchyFunctions} from "budibase-core";
 import {makeNewChildRecord, makeNewChildIndex, 
     NewRootRecord, NewRootIndex} from "../builderStore/currentNode";
+
+const hierarchyWidth = "200px";
 
 const defaultNewIndexActions =  [{
     label:"New Root Index", 
@@ -49,7 +52,7 @@ database.subscribe(db => {
 </script>
 
 <div class="root">
-    <div class="hierarchy">
+    <div class="hierarchy" style="width: {hierarchyWidth}">
         <div class="hierarchy-title-row">
             <div class="hierarchy-title">Records</div>
             <DropdownButton iconName="plus" actions={newRecordActions} />
@@ -67,12 +70,13 @@ database.subscribe(db => {
         {/each}
     </div>
     <div class="node-container">
+        <ActionsHeader left={hierarchyWidth}/>
         {#if !$database.currentNode}
         <h1>nothing selected</h1>
         {:else if $database.currentNode.type === "record"}
-        <RecordView record={$database.currentNode} />
+        <RecordView />
         {:else}
-        <IndexView index={$database.currentNode} />
+        <IndexView />
         {/if}
     </div>
 </div>
@@ -87,7 +91,6 @@ database.subscribe(db => {
 
 .hierarchy {
     flex: 0 1 auto;
-    width: 200px;
     background-color: var(--primary10);
     overflow-y: auto;
     height: 100%;
@@ -96,6 +99,7 @@ database.subscribe(db => {
 .node-container {
     flex: 1 1 auto;
     overflow-y: auto;
+    padding-top: 30px;
 }
 
 .hierarchy-title-row {

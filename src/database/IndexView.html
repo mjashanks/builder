@@ -3,25 +3,31 @@
 import Textbox from "../common/Textbox.html";
 import CodeArea from "../common/CodeArea.html";
 import Button from "../common/Button.html";
+import Dropdown from "../common/Dropdown.html";
 import {database} from "../builderStore";
-import {filter, some} from "lodash/fp";
+import {filter, some, map} from "lodash/fp";
 import {hierarchy as hierarchyFunctions, common} from "budibase-core";
 
 const chain = common.$;
 
-export let index;
+let index;
 let indexableRecords = [];
 
 database.subscribe($database => {
+    index = $database.currentNode;
     indexableRecords = chain($database.hierarchy,[
         hierarchyFunctions.getFlattenedHierarchy,
         filter(hierarchyFunctions.isDecendant(index.parent())),
-        filter(hierarchyFunctions.isRecord)
+        filter(hierarchyFunctions.isRecord),
+        map(n => ({
+            node:n,
+            isallowed: some(id => n.nodeId === id)(index.allowedRecordNodeIds)
+        }))
     ]);
 });
 
 const toggleAllowedRecord = record => {
-    if(some(id => id === record.nodeId)(index.allowedRecordNodeIds)) {
+    if(record.isallowed) {
         index.allowedRecordNodeIds = filter(id => id !== record.nodeId)
                                            (index.allowedRecordNodeIds);
     } else {
@@ -37,14 +43,19 @@ const toggleAllowedRecord = record => {
     <div class="allowed-records">
         <div>Records to Index</div>
         {#each indexableRecords as rec}
-        <input type="checkbox" on:change={() => toggleAllowedRecord(rec)}/>
-        <span>{rec.name}</span>
+        <input type="checkbox" checked={rec.isallowed} on:change={() => toggleAllowedRecord(rec)}/>
+        <span>{rec.node.name}</span>
         {/each}
     </div>
 
-    <CodeArea bind:text={index.map} label="Map"/>
-    <CodeArea bind:text={index.filter} label="Filter"/>
 
+    <Dropdown label="Index Type" bind:value={index.indexType} options={["ancestor", "reference"]} />
+
+    <CodeArea bind:text={index.map} label="Map (javascript)"/>
+    <CodeArea bind:text={index.filter} label="Filter (javascript expression)"/>
+    <CodeArea bind:text={index.getShardName} label="Shard Name (javascript expression)"/>
+
+    
 </div>
 
 <style>
