@@ -1,4 +1,4 @@
-import {constructHierarchy} from "./currentNode";
+import {constructHierarchy} from "../common/core";
 
 export const createPackage = (hasAppPackage, database) => {
     hasAppPackage.set(true);

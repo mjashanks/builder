@@ -3,23 +3,59 @@
 import Textbox from "../common/Textbox.html";
 import Button from "../common/Button.html";
 import getIcon from "../common/icon";
-import {map, join, find, keys, isDate} from "lodash/fp";
+import FieldView from "./FieldView.html";
+import Modal from "../common/Modal.html";
+import {map, join, filter, some, 
+    find, keys, isDate} from "lodash/fp";
 import { database } from "../builderStore";
 import {common, hierarchy as h} from "budibase-core";
-const chain = common.$;
+import {templateApi, chain} from "../common/core";
 
 let record;
 let getIndexAllowedRecords;
+let editingField = false;
+let fieldToEdit;
+let isNewField = false;
+let newField;
+let editField;
+let deleteField;
+let onFinishedFieldEdit;
+
 
 database.subscribe($database => {
     record = $database.currentNode;
     const flattened = h.getFlattenedHierarchy($database.hierarchy);
     getIndexAllowedRecords = index => 
         chain(index.allowedRecordNodeIds, [
+            filter(id => some(n => n.nodeId === id)(flattened)),
             map(id => find(n => n.nodeId === id)
                           (flattened).name),
             join(", ")
         ]);
+
+    newField = () => {
+        isNewField = true;
+        fieldToEdit = templateApi($database.hierarchy).getNewField("string");
+        editingField = true;
+    }
+
+    onFinishedFieldEdit = (field) => {
+        if(field) {
+            database.saveField(field);
+        }
+        editingField = false;
+    }
+
+    editField = (field) => {
+        isNewField = false;
+        fieldToEdit = field;
+        editingField = true;
+    }
+
+    deleteField = (field) => {
+        database.deleteField(field);
+    }
+
 })
 
 let getTypeOptionsValueText = value => {
@@ -52,7 +88,7 @@ let getTypeOptions = typeOptions =>
     {/if}
 
     <h4>
-        Fields <span style="margin-left:15px">{@html getIcon("plus")}</span>
+        Fields <span class="add-field-button" on:click={newField}>{@html getIcon("plus")}</span>
     </h4>
 
     {#if record.fields.length > 0}
@@ -74,7 +110,10 @@ let getTypeOptions = typeOptions =>
                 </td>
                 <td >{field.type}</td>
                 <td >{@html getTypeOptions(field.typeOptions)}</td>
-                <td class="edit-button">{@html getIcon("edit")}</td>
+                <td>
+                    <span class="edit-button" on:click={() => editField(field)}>{@html getIcon("edit")}</span>
+                    <span class="edit-button" on:click={() => deleteField(field)}>{@html getIcon("trash")}</span>
+                </td>
             </tr>
             {/each}
         </tbody>
@@ -83,6 +122,13 @@ let getTypeOptions = typeOptions =>
     (no fields added)
     {/if}
 
+    {#if editingField}
+    <Modal bind:isOpen={editingField}>
+        <FieldView field={fieldToEdit} 
+                   onFinished={onFinishedFieldEdit}
+                   allFields={record.fields} />
+    </Modal>
+    {/if}
 
     <h4>
         Indexes <span style="margin-left:15px; color:var(--primary100)">{@html getIcon("plus")}</span>
@@ -127,6 +173,11 @@ let getTypeOptions = typeOptions =>
     border-collapse:collapse;
 }
 
+.add-field-button {
+    margin-left:15px;
+    cursor:pointer;
+}
+
 .edit-button {
     cursor:pointer;
     color: var(--white);
@@ -163,7 +214,7 @@ tbody > tr:hover {
     background-color: var(--primary10);
 }
 
-tbody > tr:hover > .edit-button {
+tbody > tr:hover .edit-button {
     color: var(--secondary75);
 }
 

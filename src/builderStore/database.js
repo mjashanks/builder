@@ -3,10 +3,10 @@ import {hierarchy as hierarchyFunctions,
     common, getTemplateApi } from "budibase-core"; 
 import {filter, cloneDeep, 
     find, isEmpty} from "lodash/fp";
+import {chain, getNode, 
+    constructHierarchy, templateApi} from "../common/core";
 
-const chain = common.$;
-
-export default () => {
+export const getDatabaseStore = () => {
     const writable = bbWritable(
         "database", {
         hierarchy: {},
@@ -30,8 +30,12 @@ export default () => {
     writable.saveCurrentNode = saveCurrentNode(writable);
     writable.importHierarchy = importHierarchy(writable);
     writable.deleteCurrentNode = deleteCurrentNode(writable);
+    writable.saveField = saveField(writable);
+    writable.deleteField = deleteField(writable);
     return writable;
-}     
+} 
+
+export default getDatabaseStore;
 
 const newRecord = (databaseStore, useRoot) => () => {
     databaseStore.update(db => {
@@ -129,18 +133,26 @@ const deleteCurrentNode = databaseStore => () => {
     });
 }
 
-const getNode = (hierarchy, nodeId) => 
-    chain(hierarchy, [
-        hierarchyFunctions.getFlattenedHierarchy,
-        find(n => n.nodeId === nodeId)
-    ]);
+const saveField = databaseStore => (field) => {
+    databaseStore.update(db => {
+        db.currentNode.fields = filter(f => f.name !== field.name)
+                                      (db.currentNode.fields);
+            
+        templateApi(db.hierarchy).addField(db.currentNode, field);
+        return db;
+    });
+}
+
+
+const deleteField = databaseStore => field => {
+    databaseStore.update(db => {
+        db.currentNode.fields = filter(f => f.name !== field.name)
+                                      (db.currentNode.fields);
+
+        return db;
+    });
+}
 
 const createShadowHierarchy = hierarchy => 
     constructHierarchy(cloneDeep(hierarchy));
 
-const constructHierarchy = node => {
-    if(!node) return node;
-    return templateApi(node).constructHeirarchy(node);
-}
-
-const templateApi = hierarchy => getTemplateApi({heirarchy:hierarchy})
