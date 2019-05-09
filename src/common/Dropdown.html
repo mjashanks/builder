@@ -3,14 +3,22 @@
 export let selected;
 export let label;
 export let options;
+export let valueMember;
+export let textMember;
+export let multiple=false;
+
+const valueChanged = (event) => {
+    selected = event.target.value;
+}
 
 </script>
 
 <div class="container">
     <div class="label">{label}</div>
-    <select class="control" bind:value={selected}>
+
+    <select class="control" multiple={multiple} value={selected} on:change={valueChanged}>
         {#each options as option}
-        <option>{option}</option>
+        <option value={!valueMember ? option : valueMember(option)}>{!textMember ? option : textMember(option)}</option>
         {/each}
     </select>
 </div>

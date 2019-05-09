@@ -126,7 +126,8 @@ let getTypeOptions = typeOptions =>
     <Modal bind:isOpen={editingField}>
         <FieldView field={fieldToEdit} 
                    onFinished={onFinishedFieldEdit}
-                   allFields={record.fields} />
+                   allFields={record.fields} 
+                   database={$database}/>
     </Modal>
     {/if}
 

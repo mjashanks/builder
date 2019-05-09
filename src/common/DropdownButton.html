@@ -7,8 +7,12 @@ let isDroppedDown = false;
 
 </script>
 
+
 <div class="root" on:click={() => isDroppedDown = !isDroppedDown}>
     {@html getIcon(iconName)}
+    
+    <div class="dropdown-background" on:click|stopPropagation={() => isDroppedDown = false} style="display: {isDroppedDown ? 'block' : 'none'}"></div>
+
     <div class="dropdown-content" style="display: {isDroppedDown ? 'inline-block' : 'none'}">
         {#each actions as action}
         <div class="action-row" on:click={action.onclick}>
@@ -16,12 +20,23 @@ let isDroppedDown = false;
         </div>
         {/each}
     </div>
+    
 </div>
+
 
 <style>
 
+.dropdown-background {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+}
+
 .root {
     cursor: pointer;
+    z-index: 1;
 }
 
 .dropdown-content {
