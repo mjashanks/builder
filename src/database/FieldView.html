@@ -10,7 +10,8 @@ import DatePicker from "../common/DatePicker.html";
 import {cloneDeep, assign, keys, 
     isNumber, includes, map, isBoolean} from "lodash/fp";
 import {allTypes, validate, getPotentialReferenceIndexes,
-    getPotentialReverseReferenceIndexes, getNode} from "../common/core";
+    getDefaultTypeOptions, getNode,
+    getPotentialReverseReferenceIndexes} from "../common/core";
 
 export let field;
 export let allFields;
@@ -22,7 +23,6 @@ let errors = [];
 //$:isValid = errors.length === 0;
 $: clonedField = cloneDeep(field);
 $: isNew = !!field && field.name.length === 0;
-$: typeOptions = allTypes[clonedField.type].optionDefinitions;
 
 $: possibleReferenceIndexes = getPotentialReferenceIndexes(
     database.hierarchy, database.currentNode
@@ -39,23 +39,19 @@ $: possibleReverseReferenceIndexes =
     : getPotentialReverseReferenceIndexes(
         database.hierarchy, selectedReverseRefIndex);
 
+const typeChanged = (ev) => 
+    clonedField.typeOptions = getDefaultTypeOptions(ev.detail);
+
+
 const save = () => {
 
     errors = validate.field(allFields)(clonedField);
     if(errors.length > 0) return;
+    field.typeOptions = cloneDeep(clonedField.typeOptions);
     onFinished(
         assign(field)(clonedField)
     );
 }
-
-const isNumberField = optName => 
-    includes(optName)
-            (["maxLength", "minLength",
-             "maxValue", "minValue", 
-             "decimalPlaces"])
-    && clonedField.type !== "date";
-
-
 
 </script>
 
@@ -70,7 +66,7 @@ const isNumberField = optName =>
     {/if}
 
     <Textbox label="Label" bind:text={clonedField.label} />
-    <Dropdown label="Type" bind:selected={clonedField.type} options={keys(allTypes)} />
+    <Dropdown label="Type" bind:selected={clonedField.type} options={keys(allTypes)} on:change={typeChanged} />
 
     {#if clonedField.type === "string"}
     <NumberBox label="Max Length" bind:value={clonedField.typeOptions.maxLength} />

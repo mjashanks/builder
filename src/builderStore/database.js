@@ -1,9 +1,9 @@
 import {bbWritable} from "./useLocalStorage";
 import {hierarchy as hierarchyFunctions, 
     common, getTemplateApi } from "budibase-core"; 
-import {filter, cloneDeep, 
+import {filter, cloneDeep, sortBy,
     find, isEmpty} from "lodash/fp";
-import {chain, getNode, 
+import {chain, getNode, validate,
     constructHierarchy, templateApi} from "../common/core";
 
 export const getDatabaseStore = () => {
@@ -11,12 +11,14 @@ export const getDatabaseStore = () => {
         "database", {
         hierarchy: {},
         currentNodeIsNew: false,
+        errors: [],
         currentNode: null}, 
         db => {
             if(!!db.hierarchy && !isEmpty(db.hierarchy)) {
                 db.hierarchy = constructHierarchy(db.hierarchy);
+                const shadowHierarchy = createShadowHierarchy(db.hierarchy);
                 db.currentNode = getNode(
-                    db.hierarchy, db.currentNode.nodeId
+                    shadowHierarchy, db.currentNode.nodeId
                 );
             }
             return db;
@@ -45,7 +47,7 @@ const newRecord = (databaseStore, useRoot) => () => {
                  : getNode(
                     shadowHierarchy, 
                     db.currentNode.nodeId);
-
+        db.errors = [];
         db.currentNode = templateApi(shadowHierarchy)
                          .getNewRecordTemplate(parent, "", true);
         return db;
@@ -55,10 +57,12 @@ const newRecord = (databaseStore, useRoot) => () => {
 
 const selectExistingNode = (databaseStore) => (nodeId) => {
     databaseStore.update(db => {
+        const shadowHierarchy = createShadowHierarchy(db.hierarchy);
         db.currentNode = getNode(
-            db.hierarchy, nodeId
+            shadowHierarchy, nodeId
         );
         db.currentNodeIsNew = false;
+        db.errors = [];
         return db;
     })
 }
@@ -66,6 +70,7 @@ const selectExistingNode = (databaseStore) => (nodeId) => {
 const newIndex = (databaseStore, useRoot) => () => {
     databaseStore.update(db => {
         db.currentNodeIsNew = true;
+        db.errors = [];
         const shadowHierarchy = createShadowHierarchy(db.hierarchy);
         parent = !useRoot ? shadowHierarchy
                  : getNode(
@@ -80,14 +85,23 @@ const newIndex = (databaseStore, useRoot) => () => {
 
 const saveCurrentNode = (databaseStore) => () => {
     databaseStore.update(db => {
+
+        const errors = validate.node(db.currentNode);
+        db.errors = errors;
+        if(errors.length > 0) {
+            return db;
+        }
+
         const parentNode = getNode(
             db.hierarchy, db.currentNode.parent().nodeId);
 
         const existingNode = getNode(
             db.hierarchy, db.currentNode.nodeId);
 
+        let index = parentNode.children.length;
         if(!!existingNode) {
             // remove existing
+            index = existingNode.parent().children.indexOf(existingNode);
             existingNode.parent().children = chain(existingNode.parent().children, [
                 filter(c => c.nodeId !== existingNode.nodeId)
             ]);
@@ -99,6 +113,16 @@ const saveCurrentNode = (databaseStore) => () => {
             parentNode, 
             cloned
         );
+
+        const newIndexOfchild = child => {
+            if(child === cloned) return index;
+            const currentIndex = parentNode.children.indexOf(child);
+            return currentIndex >= index ? currentIndex + 1 : currentIndex;
+        }
+
+        parentNode.children = chain(parentNode.children, [
+            sortBy(newIndexOfchild)
+        ]);
 
         return db;
     });
@@ -129,6 +153,7 @@ const deleteCurrentNode = databaseStore => () => {
             nodeToDelete.parent().indexes = filter(c => c.nodeId !== nodeToDelete.nodeId)
                                                    (nodeToDelete.parent().indexes);
         }
+        db.errors = [];
         return db;
     });
 }
@@ -154,5 +179,5 @@ const deleteField = databaseStore => field => {
 }
 
 const createShadowHierarchy = hierarchy => 
-    constructHierarchy(cloneDeep(hierarchy));
+    constructHierarchy(JSON.parse(JSON.stringify(hierarchy)));
 

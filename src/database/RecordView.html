@@ -9,7 +9,7 @@ import {map, join, filter, some,
     find, keys, isDate} from "lodash/fp";
 import { database } from "../builderStore";
 import {common, hierarchy as h} from "budibase-core";
-import {templateApi, chain} from "../common/core";
+import {templateApi, chain, validate} from "../common/core";
 
 let record;
 let getIndexAllowedRecords;
@@ -132,7 +132,7 @@ let getTypeOptions = typeOptions =>
     {/if}
 
     <h4>
-        Indexes <span style="margin-left:15px; color:var(--primary100)">{@html getIcon("plus")}</span>
+        Indexes 
     </h4>
 
     {#each record.indexes as index}

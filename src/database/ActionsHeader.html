@@ -2,6 +2,7 @@
 import Button from "../common/Button.html";
 import {database} from "../builderStore";
 import Modal from "../common/Modal.html";
+import ErrorsBox from "../common/ErrorsBox.html";
 
 export let left;
 let confirmDelete = false;
@@ -31,6 +32,12 @@ const deleteCurrentNode = () => {
         Delete
     </Button>
     {/if}
+
+    {#if !!$database.errors && $database.errors.length > 0}
+    <div style="width: 500px">
+        <ErrorsBox errors={$database.errors}/>
+    </div>
+    {/if}
     
     <Modal bind:isOpen={confirmDelete}>
         <div style="margin: 10px 0px 20px 0px">Are you sure you want to delete {$database.currentNode.name} ?</div>
@@ -45,7 +52,6 @@ const deleteCurrentNode = () => {
 
 .root {
     padding:5px;
-    position:absolute;
     top:0;
     width:100%;
 }

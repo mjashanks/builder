@@ -68,14 +68,18 @@ database.subscribe(db => {
         {/each}
     </div>
     <div class="node-container">
-        <ActionsHeader left={hierarchyWidth}/>
-        {#if !$database.currentNode}
-        <h1>nothing selected</h1>
-        {:else if $database.currentNode.type === "record"}
-        <RecordView />
-        {:else}
-        <IndexView />
-        {/if}
+        <div class="actions-header">
+            <ActionsHeader left={hierarchyWidth}/>
+        </div>
+        <div class="node-view">
+            {#if !$database.currentNode}
+            <h1>nothing selected</h1>
+            {:else if $database.currentNode.type === "record"}
+            <RecordView />
+            {:else}
+            <IndexView />
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -96,8 +100,17 @@ database.subscribe(db => {
 
 .node-container {
     flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.actions-header {
+    flex: 0 1 auto;
+}
+
+.node-view {
     overflow-y: auto;
-    padding-top: 30px;
+    flex: 1 1 auto;
 }
 
 .hierarchy-title-row {

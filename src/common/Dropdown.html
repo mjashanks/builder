@@ -1,4 +1,5 @@
 <script>
+import {createEventDispatcher} from "svelte";
 
 export let selected;
 export let label;
@@ -7,8 +8,10 @@ export let valueMember;
 export let textMember;
 export let multiple=false;
 
+const dispatch =createEventDispatcher();
 const valueChanged = (event) => {
     selected = event.target.value;
+    dispatch("change", selected);
 }
 
 </script>

@@ -1,24 +1,40 @@
 <script>
 
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.css";
+import { onMount } from 'svelte';
+
 export let value;
 export let label;
+let input;
+let fpInstance;
 
-const inputChanged = ev => {
-    try {
-        value = new Date(ev.target.value);
-    } catch(_) {
-        value = null;
-    }
-}
+$: if (fpInstance) fpInstance.setDate(value);
+
+onMount(() => {
+    fpInstance =  flatpickr(input, {});
+
+    fpInstance.config.onChange.push(selectedDates => {
+        if(selectedDates.length > 0)
+            value = new Date(selectedDates[0]);
+    });
+
+    return fpInstance;
+})
+
+
+
+
+
 
 
 </script>
 
-<div class="container">
-    <div class="label">{label}</div>
-    <input class="control" type="date" value={value} on:change={inputChanged} >
-</div>
 
+ <div class="container" >
+    <div class="label">{label}</div>
+    <input class="control" bind:this={input} />
+</div>
 
 <style>
 .container {
@@ -29,7 +45,8 @@ const inputChanged = ev => {
 .label {
     grid-column-start: label;
     align-self: center;
-}
+} 
+
 .control {
     grid-column-start: control;
     align-self: center;
@@ -39,5 +56,6 @@ const inputChanged = ev => {
 input {
     width:300px;
 }
+
 
 </style>

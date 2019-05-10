@@ -42,3 +42,6 @@ export const getPotentialReferenceIndexes = (hierarchy, record) =>
                     || i.parent().nodeId === record.parent().nodeId
                     || hierarchyFunctions.isRoot(i.parent()))
     ]);
+
+export const getDefaultTypeOptions = type => 
+    !type ? {} : allTypes[type].getDefaultOptions();
