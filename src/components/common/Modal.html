@@ -1,0 +1,39 @@
+<script>
+
+export let isOpen = false;
+
+</script>
+
+<div class="root" style="display: {isOpen ? 'grid' : 'none'}" on:click={() => isOpen=false}>
+    <div class="content" on:click|stopPropagation={()=>{}}>
+        <slot />
+    </div>
+</div>
+
+<style>
+.root {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    grid-template-columns: [leftCol] 10px [midCol] auto [rightCol] 10px;
+    grid-template-rows: [topRow] 10px [midRow] auto [bottomRow] 10px;
+    background-color: var(--secondary10);
+    backdrop-filter: blur(5px);
+}
+
+.content {
+    margin: auto;
+    padding:10px;
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--borderradius);
+    border-color: var(--darkslate);
+    box-shadow: 5px 2px 9px 0px var(--secondary75);
+    display: inline-block;
+    grid-column-start: midCol;
+    grid-row-start: midRow;
+}
+</style>
