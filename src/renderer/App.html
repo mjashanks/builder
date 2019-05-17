@@ -5,7 +5,7 @@
 	import {hasAppPackage, initialise} from "./builderStore";
 </script>
 
-<div class="app-root">
+<main>
 
 	{#await initialise()}
 	
@@ -21,10 +21,10 @@
 		{/if}
 	
 	{/await}
-</div>
+</main>
 
 <style>
-	.app-root {
+	main {
 		height: 100%;
 		width: 100%;
 		font-family: "Nunito", Helvetica, Arial, sans-serif;
