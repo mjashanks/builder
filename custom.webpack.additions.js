@@ -5,10 +5,14 @@ const extractCSS = new ExtractTextPlugin('styles.css');
 
 module.exports = {
 
+    resolve: {
+        extensions: [".mjs", ".js", ".json", ".svelte"]
+    },
+
     module: {
         rules: [
             {
-                test: /\.html$/,
+                test: /\.svelte$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'svelte-loader',

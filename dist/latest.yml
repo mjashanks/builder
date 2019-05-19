@@ -1,0 +1,8 @@
+version: 0.0.0
+files:
+  - url: budibase-builder-setup-0.0.0.exe
+    sha512: NCJF+iicQCiA9mRdblwHIC61x9nCRKvQEjZbF8Pbts7anGf7qYsiqAsDSYsGR+D858rSKKSt2nhlX+el92AIPA==
+    size: 45168080
+path: budibase-builder-setup-0.0.0.exe
+sha512: NCJF+iicQCiA9mRdblwHIC61x9nCRKvQEjZbF8Pbts7anGf7qYsiqAsDSYsGR+D858rSKKSt2nhlX+el92AIPA==
+releaseDate: '2019-05-19T18:12:35.245Z'

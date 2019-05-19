@@ -1,4 +1,4 @@
-import App from './App.html';
+import App from "./App.svelte";
 import "./global.css";
 import "./fonts.css";
 import "./assets/budibase-logo.png";

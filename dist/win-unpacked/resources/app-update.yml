@@ -1,0 +1,4 @@
+owner: mikebudi
+repo: builder
+provider: github
+updaterCacheDirName: budibase-builder-updater

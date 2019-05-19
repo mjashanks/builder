@@ -1,0 +1,50 @@
+<script>
+import {createEventDispatcher} from "svelte";
+
+export let selected;
+export let label;
+export let options;
+export let valueMember;
+export let textMember;
+export let multiple=false;
+
+const dispatch =createEventDispatcher();
+const valueChanged = (event) => {
+    selected = event.target.value;
+    dispatch("change", selected);
+}
+
+</script>
+
+<div class="container">
+    <div class="label">{label}</div>
+
+    <select class="control" multiple={multiple} value={selected} on:change={valueChanged}>
+        {#each options as option}
+        <option value={!valueMember ? option : valueMember(option)}>{!textMember ? option : textMember(option)}</option>
+        {/each}
+    </select>
+</div>
+
+<style>
+
+.container {
+    display: grid;
+    grid-template-columns: [label] 100px [control] auto;
+    margin: 20px 0px;
+}
+.label {
+    grid-column-start: label;
+    align-self: center;
+}
+.control {
+    grid-column-start: control;
+    align-self: center;
+    margin: 0;
+}
+
+select {
+    width:300px;
+}
+
+</style>
