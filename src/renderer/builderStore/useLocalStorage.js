@@ -2,6 +2,7 @@
 import {writable} from "svelte/store";
 
 import fs from "fs";
+import os from "os";
 import {join} from "path";
 import {promisify} from "util";
 
@@ -9,7 +10,7 @@ const access = promisify(fs.access);
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
-const budibaseFolder = join(fs.homedir(), "budibase");
+const budibaseFolder = join(os.homedir(), "budibase");
 
 const budibaseFile = filename => join(budibaseFolder, filename);
 

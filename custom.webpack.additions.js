@@ -1,12 +1,22 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+const webpackMain = require('electron-webpack/webpack.renderer.config.js')
+const { inspect } = require('util')
+
+webpackMain().then(config => {
+  console.log(inspect(config, {
+    showHidden: false,
+    depth: null,
+    colors: true
+  }))
+})
 // Extract CSS
 const extractCSS = new ExtractTextPlugin('styles.css');
 
 module.exports = {
 
     resolve: {
-        extensions: [".mjs", ".js", ".json", ".svelte"]
+        extensions: [".mjs", ".js", ".json"]
     },
 
     module: {

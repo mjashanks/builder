@@ -3,6 +3,7 @@
 	import NoPackage from "./NoPackage.svelte";
 	import PackageRoot from "./PackageRoot.svelte";
 	import {hasAppPackage, initialise} from "./builderStore";
+	
 </script>
 
 <main>

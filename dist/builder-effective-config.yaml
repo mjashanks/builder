@@ -1,16 +1,4 @@
 directories:
   output: dist
   buildResources: build
-extraMetadata:
-  main: main.js
-files:
-  - filter:
-      - package.json
-  - from: 'C:\code\budibase\builder\dist/main'
-  - from: 'C:\code\budibase\builder\dist/renderer'
-  - from: 'C:\code\budibase\builder\dist/renderer-dll'
-extraResources:
-  - from: static
-    to: static
-extends: 'file:C:\code\budibase\builder\node_modules\electron-webpack\out\electron-builder.js'
 electronVersion: 4.0.1
