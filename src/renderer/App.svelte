@@ -2,7 +2,7 @@
 	
 	import NoPackage from "./NoPackage.svelte";
 	import PackageRoot from "./PackageRoot.svelte";
-	import {hasAppPackage, initialise} from "./builderStore";
+	import {packageInfo, initialise} from "./builderStore";
 	
 </script>
 
@@ -13,14 +13,16 @@
 		<h1>loading</h1>
 
 	{:then result}
-		{#if $hasAppPackage}
+		{#if $packageInfo.hasAppPackage}
 		<PackageRoot />
 		{/if}
 
-		{#if !$hasAppPackage}
+		{#if !$packageInfo.hasAppPackage}
 		<NoPackage />
 		{/if}
-	
+
+	{:catch err}
+		<h1 style="color:red">{err}</h1>
 	{/await}
 </main>
 

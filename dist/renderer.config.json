@@ -1,0 +1,139 @@
+{
+  "context": "C:\\code\\budibase\\builder",
+  "devtool": "eval-source-map",
+  "externals": [
+    "budibase-core",
+    "feather-icons",
+    "flatpickr",
+    "lodash",
+    "electron",
+    "webpack",
+    "electron-devtools-installer"
+  ],
+  "node": {
+    "__dirname": true,
+    "__filename": true
+  },
+  "output": {
+    "filename": "[name].js",
+    "chunkFilename": "[name].bundle.js",
+    "libraryTarget": "commonjs2",
+    "path": "C:\\code\\budibase\\builder\\dist\\renderer"
+  },
+  "target": "electron-renderer",
+  "resolve": {
+    "alias": {
+      "@": "C:\\code\\budibase\\builder\\src\\renderer",
+      "common": "C:\\code\\budibase\\builder\\src\\common"
+    },
+    "extensions": [
+      ".mjs",
+      ".js",
+      ".json",
+      ".svelte"
+    ]
+  },
+  "module": {
+    "rules": [
+      {
+        "test": {},
+        "exclude": {},
+        "use": {
+          "loader": "svelte-loader",
+          "options": {
+            "emitCss": true,
+            "hotReload": true
+          }
+        }
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "C:\\code\\budibase\\builder\\node_modules\\extract-text-webpack-plugin\\dist\\loader.js",
+            "options": {
+              "id": 1,
+              "omit": 0,
+              "remove": true
+            }
+          },
+          {
+            "loader": "css-loader"
+          }
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "file-loader",
+            "options": {
+              "name": "assets/[name].[ext]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "plugins": [
+    {
+      "filename": "styles.css",
+      "id": 1,
+      "options": {}
+    },
+    {
+      "definitions": {
+        "definitions": {
+          "__static": "\"./static\"",
+          "process.env.NODE_ENV": "\"development\""
+        }
+      }
+    },
+    {
+      "options": {
+        "template": "!!html-loader?minimize=false&url=false!C:\\code\\budibase\\builder\\dist\\.renderer-index-template.html",
+        "filename": "index.html",
+        "hash": false,
+        "inject": true,
+        "compile": true,
+        "favicon": false,
+        "minify": false,
+        "cache": true,
+        "showErrors": true,
+        "chunks": "all",
+        "excludeChunks": [],
+        "chunksSortMode": "auto",
+        "meta": {},
+        "title": "Webpack App",
+        "xhtml": false
+      },
+      "childCompilerHash": "ecac353e1f896f989423e71f544e1897",
+      "childCompilationOutputName": "index.html"
+    }
+  ],
+  "devServer": {
+    "contentBase": [
+      "C:\\code\\budibase\\builder\\static",
+      "C:\\code\\budibase\\builder\\dist\\renderer-dll",
+      "./static",
+      "./dist/renderer-dll"
+    ],
+    "host": "localhost",
+    "port": "9080",
+    "hot": false,
+    "overlay": true,
+    "watchContentBase": true
+  },
+  "optimization": {
+    "nodeEnv": "development",
+    "namedModules": true,
+    "noEmitOnErrors": true
+  },
+  "mode": "development",
+  "entry": {
+    "renderer": [
+      "css-hot-loader/hotModuleReplacement",
+      "C:\\code\\budibase\\builder\\src\\renderer\\index.js"
+    ]
+  }
+}

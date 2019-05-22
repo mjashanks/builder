@@ -1,15 +1,12 @@
 // useLocalStorage.js
 import {writable} from "svelte/store";
 
-import fs from "fs";
+import {access, readFile, 
+    mkdir, writeFile} from "../common/fs-async";
 import os from "os";
 import {join} from "path";
-import {promisify} from "util";
+import fs from "fs";
 
-const access = promisify(fs.access);
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
 const budibaseFolder = join(os.homedir(), "budibase");
 
 const budibaseFile = filename => join(budibaseFolder, filename);
@@ -20,19 +17,25 @@ export const bbWritable = (name, initial, modifyStored) => {
         modifyStored = s => s;
 
     const wr = writable(initial);
+    const localStorageKey = budibaseFile(`store_${name}.json`);
+    
+    let hasInitialised = false;
 
     const initialise = async () => {
-        const localStorageKey = budibaseFile(`store_${name}.json`);
-        const jsonFromStore = await getOrCreateFile(localStorageKey, initial);
+        hasInitialised = true;
+        const jsonFromStore = await getOrCreateFile(
+            localStorageKey, 
+            JSON.stringify(initial, null, 2));
         const val = modifyStored(JSON.parse(jsonFromStore));    
         wr.set(val);
     }
 
-    wr.subscribe(v => 
+    wr.subscribe(v => {
+        if(!hasInitialised) return;
         writeFileFireAndForget(
             localStorageKey, 
-            JSON.stringify(v))
-    );
+            JSON.stringify(v, null, 2))
+    });
 
     wr.initialise = initialise;
 
@@ -49,7 +52,7 @@ export const initialiseLocalFolder = async () => {
 
 export const getOrCreateFile = async (path, defaultContent) => {
     try {
-        return await readFile(path);
+        return await readFile(path, {encoding:"utf8"});
     } catch(_) {
         await writeFile(path, defaultContent, "utf8");
         return defaultContent;

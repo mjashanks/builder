@@ -1,8 +1,8 @@
-import {constructHierarchy} from "../common/core";
+import {createNewHeirarchy} from "../common/core";
 
-export const createPackage = (hasAppPackage, database) => {
-    hasAppPackage.set(true);
-    const root = constructHierarchy(testroot);
+export const createPackage = (packageInfo, database) => {
+  packageInfo.createNewPackage("");
+    const root = createNewHeirarchy();
     database.importHierarchy(root);
 };
 

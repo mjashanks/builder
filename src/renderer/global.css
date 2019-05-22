@@ -29,7 +29,8 @@
     --darkslate: #5C6B82;
     --slate: #8B95A6;
 
-    --borderradius: 2px 2px 2px 2px;
+    --borderradius: 2px;
+    --borderradiusall: 2px 2px 2px 2px;
 
     --fontblack: "Lato Black";
     --fontbold: "Lato Bold";

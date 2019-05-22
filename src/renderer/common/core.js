@@ -15,6 +15,10 @@ export const constructHierarchy = node => {
     return templateApi(node).constructHeirarchy(node);
 }
 
+export const createNewHeirarchy = () => {
+    return templateApi().getNewRootLevel();
+}
+
 export const templateApi = hierarchy => getTemplateApi({heirarchy:hierarchy})
 
 export const allTypes = templateApi({}).allTypes;

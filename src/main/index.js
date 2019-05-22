@@ -10,7 +10,13 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow
 
 function createMainWindow() {
-  const window = new BrowserWindow()
+  const iconPath = path.join(__dirname, "build", "icon.png");
+  const window = new BrowserWindow({
+    icon: iconPath,
+    width: 1000,
+    height: 740,
+    center:true
+  });
 
   if (isDevelopment) {
     window.webContents.openDevTools()

@@ -5,6 +5,7 @@ import Database from "./database/DatabaseRoot.svelte" ;
 import UserInterface from "./userInterface/UserInterfaceRoot.svelte" ;
 import ActionsAndTriggers from "./actionsAndTriggers/ActionsAndTriggersRoot.svelte" ;
 import ComingSoon from "./common/ComingSoon.svelte";
+import PackageManagment from "./packageManagement/PackageManagmentRoot.svelte";
 
 import {activeNav} from "./builderStore";
 
@@ -27,6 +28,8 @@ export let navWidth = "50px";
     <ComingSoon name="Access Levels" />
     {:else if $activeNav === "user interface"}
     <UserInterface />
+    {:else if $activeNav === "package"}
+    <PackageManagment />
     {/if}
   </div>
 </div>

@@ -17,9 +17,10 @@ export const getDatabaseStore = () => {
             if(!!db.hierarchy && !isEmpty(db.hierarchy)) {
                 db.hierarchy = constructHierarchy(db.hierarchy);
                 const shadowHierarchy = createShadowHierarchy(db.hierarchy);
-                db.currentNode = getNode(
-                    shadowHierarchy, db.currentNode.nodeId
-                );
+                if(db.currentNode !== null)
+                    db.currentNode = getNode(
+                        shadowHierarchy, db.currentNode.nodeId
+                    );
             }
             return db;
         });

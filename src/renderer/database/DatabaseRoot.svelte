@@ -25,12 +25,9 @@ let newIndexActions = defaultNewIndexActions;
 let newRecordActions = defaultNewRecordActions;
 
 database.subscribe(db => {
-    if(hierarchyFunctions.isIndex(db.currentNode)) {
-        
-
+    if(!db.currentNode || hierarchyFunctions.isIndex(db.currentNode)) {
         newRecordActions = defaultNewRecordActions;
         newIndexActions = defaultNewIndexActions;
-
     } else {
         newRecordActions = [
             ...defaultNewRecordActions,
@@ -69,11 +66,13 @@ database.subscribe(db => {
     </div>
     <div class="node-container">
         <div class="actions-header">
+            {#if $database.currentNode}
             <ActionsHeader left={hierarchyWidth}/>
+            {/if}
         </div>
         <div class="node-view">
             {#if !$database.currentNode}
-            <h1>nothing selected</h1>
+            <h1 style="margin-left: 100px">:)</h1>
             {:else if $database.currentNode.type === "record"}
             <RecordView />
             {:else}

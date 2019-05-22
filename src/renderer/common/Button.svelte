@@ -1,27 +1,34 @@
 <script>
 
-import {createEventDispatcher} from "svelte";
-
 export let color = "primary";
 export let className = "";
 export let style = "";
+export let groupPostion = "";
 
-const dispatch = createEventDispatcher();
-const onclick = (e) => dispatch('click', e); 
-
+$: borderClass = groupPosition === "left"
+                 ? "border-left"
+                 : groupPosition === "right"
+                 ? "border-right"
+                 : groupPosition === "middle"
+                 ? "border-middle"
+                 : "border-normal";
 
 </script>
 
-<button class="{color} {className}" 
+<button class="{color} {className} {borderClass}" 
         style="{style}"
-        on:click={onclick}>
+        on:click>
     <slot/>
 </button>
 
 <style>
 
-button {
-    border-radius: var(--borderradius);   
+.border-normal { border-radius: var(--borderradiusall); }
+.border-left { border-radius: var(--borderradius) 0 0 var(--borderradius); }
+.border-right { border-radius: 0 var(--borderradius) var(--borderradius) 0; }
+.border-middle { border-radius: 0; }
+
+button {  
     border-style: solid; 
     padding: 7px 15px;
 }

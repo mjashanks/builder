@@ -8,6 +8,11 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
+  "build": {
+    "files": [
+      "build/*"
+    ]
+  },
   "dependencies": {
     "budibase-core": "git+ssh://git@github.com:Budibase/budibase-core-dist.git",
     "feather-icons": "^4.21.0",

@@ -18,7 +18,7 @@ $:hasErrors = errors.length > 0;
     padding:10px;
     border-style: solid;
     border-color: var(--deletion100);
-    border-radius: var(--borderradius);
+    border-radius: var(--borderradiusall);
     background: var(--deletion75);
 }
 

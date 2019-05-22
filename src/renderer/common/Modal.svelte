@@ -29,7 +29,7 @@ export let isOpen = false;
     background-color: var(--white);
     border-style: solid;
     border-width: 1px;
-    border-radius: var(--borderradius);
+    border-radius: var(--borderradiusall);
     border-color: var(--darkslate);
     box-shadow: 5px 2px 9px 0px var(--secondary75);
     display: inline-block;
