@@ -4,18 +4,15 @@ export let color = "primary";
 export let className = "";
 export let style = "";
 export let groupPosition = "";
+export let grouped = false;
 
-$: borderClass = groupPosition === "left"
-                 ? "border-left"
-                 : groupPosition === "right"
-                 ? "border-right"
-                 : groupPosition === "middle"
-                 ? "border-middle"
+$: borderClass = grouped 
+                 ? ""
                  : "border-normal";
 
 </script>
 
-<button class="{color} {className} {borderClass}" 
+<button class="{color} {className} {borderClass} {grouped ? "grouped" : ""}" 
         style="{style}"
         on:click>
     <slot/>

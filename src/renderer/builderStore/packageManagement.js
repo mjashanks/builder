@@ -48,7 +48,9 @@ const savePackage = (databaseStore, packageStore) => async (location) => {
     await writeFile(
         appDefinitionFile(location),
         JSON.stringify({
-            hierarchy: database.hierarchy
+            hierarchy: database.hierarchy,
+            actions: database.actions,
+            triggers: database.triggers
         }), 
         {encoding:"utf8"}
     );

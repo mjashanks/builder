@@ -6,6 +6,7 @@
     "feather-icons",
     "flatpickr",
     "lodash",
+    "uikit",
     "electron",
     "webpack",
     "electron-devtools-installer"
@@ -106,9 +107,7 @@
         "meta": {},
         "title": "Webpack App",
         "xhtml": false
-      },
-      "childCompilerHash": "ecac353e1f896f989423e71f544e1897",
-      "childCompilationOutputName": "index.html"
+      }
     }
   ],
   "devServer": {

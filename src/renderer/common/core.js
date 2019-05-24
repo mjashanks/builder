@@ -49,3 +49,6 @@ export const getPotentialReferenceIndexes = (hierarchy, record) =>
 
 export const getDefaultTypeOptions = type => 
     !type ? {} : allTypes[type].getDefaultOptions();
+
+export const getNewAction = () => templateApi({}).createAction();
+export const getNewTrigger = () => templateApi({}).createTrigger();

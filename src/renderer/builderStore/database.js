@@ -10,6 +10,8 @@ export const getDatabaseStore = () => {
     const writable = bbWritable(
         "database", {
         hierarchy: {},
+        actions: [],
+        triggers: [],
         currentNodeIsNew: false,
         errors: [],
         currentNode: null}, 
@@ -31,7 +33,7 @@ export const getDatabaseStore = () => {
     writable.newChildIndex = newIndex(writable, false);
     writable.newRootIndex = newIndex(writable, true);
     writable.saveCurrentNode = saveCurrentNode(writable);
-    writable.importHierarchy = importHierarchy(writable);
+    writable.importAppDefinition = importAppDefinition(writable);
     writable.deleteCurrentNode = deleteCurrentNode(writable);
     writable.saveField = saveField(writable);
     writable.deleteField = deleteField(writable);
@@ -129,12 +131,14 @@ const saveCurrentNode = (databaseStore) => () => {
     });
 }
 
-const importHierarchy = databaseStore => hierarchy => {
+const importAppDefinition = databaseStore => appDefinition => {
     databaseStore.update(db => {
-        db.hierarchy = hierarchy;
-        db.currentNode = hierarchy.children.length > 0
-                         ? hierarchy.children[0] 
+        db.hierarchy = appDefinition.hierarchy;
+        db.currentNode = appDefinition.hierarchy.children.length > 0
+                         ? appDefinition.hierarchy.children[0] 
                          : null;
+        db.actions = appDefinition.actions;
+        db.triggers = appDefinition.triggers;
         db.currentNodeIsNew = false; 
         return db;
     })

@@ -5,7 +5,7 @@ export let label="";
 
 </script>
 
-<input type="checkbox" bind:checked />{label}
+<input class="uk-checkbox" type="checkbox" bind:checked />{label}
 
 <style>
 

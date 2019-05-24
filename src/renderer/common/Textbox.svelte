@@ -5,7 +5,7 @@ export let label = "";
 
 <div class="container">
     <div class="label">{label}</div>
-    <input class="control" bind:value={text} >
+    <input class="control uk-input" bind:value={text} >
 </div>
 
 <style>

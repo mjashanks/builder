@@ -92,7 +92,7 @@ let getTypeOptions = typeOptions =>
     </h4>
 
     {#if record.fields.length > 0}
-    <table class="fields-table">
+    <table class="fields-table uk-table">
         <thead>
             <tr>
                 <th>Name</th>

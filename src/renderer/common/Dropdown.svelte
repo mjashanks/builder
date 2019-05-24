@@ -19,7 +19,7 @@ const valueChanged = (event) => {
 <div class="container">
     <div class="label">{label}</div>
 
-    <select class="control" multiple={multiple} value={selected} on:change={valueChanged}>
+    <select class="control uk-select" multiple={multiple} value={selected} on:change={valueChanged}>
         {#each options as option}
         <option value={!valueMember ? option : valueMember(option)}>{!textMember ? option : textMember(option)}</option>
         {/each}

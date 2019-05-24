@@ -58,6 +58,8 @@ const save = () => {
 
     <ErrorsBox errors={errors} />
 
+    <Dropdown label="Type" bind:selected={clonedField.type} options={keys(allTypes)} on:change={typeChanged} />
+
     {#if isNew}
     <Textbox label="Field Name" bind:text={clonedField.name} />
     {:else}
@@ -65,8 +67,7 @@ const save = () => {
     {/if}
 
     <Textbox label="Label" bind:text={clonedField.label} />
-    <Dropdown label="Type" bind:selected={clonedField.type} options={keys(allTypes)} on:change={typeChanged} />
-
+    
     {#if clonedField.type === "string"}
     <NumberBox label="Max Length" bind:value={clonedField.typeOptions.maxLength} />
     <ValuesList label="Values (options)" bind:values={clonedField.typeOptions.values} />

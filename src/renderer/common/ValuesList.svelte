@@ -41,7 +41,7 @@ $: valuesText = join("\n")(values);
 
 textarea {
     width:300px;
-    height:300px;
+    height:200px;
 }
 
 </style>

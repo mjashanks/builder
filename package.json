@@ -17,7 +17,8 @@
     "budibase-core": "git+ssh://git@github.com:Budibase/budibase-core-dist.git",
     "feather-icons": "^4.21.0",
     "flatpickr": "^4.5.7",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "uikit": "^3.1.5"
   },
   "devDependencies": {
     "electron": "4.0.1",

@@ -41,6 +41,7 @@ const setActive = () =>
 .inner {
     padding: 0px 20px 10px 0px;
     display: inline-block;
+    width:100%;
 }
 
 .nav-item:hover {
@@ -53,6 +54,7 @@ const setActive = () =>
     position: relative;
     top: 5px;
     margin-right:5px;
+    width:100%;
 }
 
 .active > div {
