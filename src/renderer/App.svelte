@@ -3,12 +3,15 @@
 	import NoPackage from "./NoPackage.svelte";
 	import PackageRoot from "./PackageRoot.svelte";
 	import {packageInfo, initialise} from "./builderStore";
+	import { onMount } from 'svelte';
 	
+	let init = initialise();
+
 </script>
 
 <main>
 
-	{#await initialise()}
+	{#await init}
 	
 		<h1>loading</h1>
 

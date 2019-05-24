@@ -1,28 +1,95 @@
 <script>
 
 import Button from "../common/Button.svelte";
-import {packageInfo} from "../builderStore"
+import {packageInfo, createNewPackage} from "../builderStore"
+import {remote} from "electron";
+import {join} from "lodash/fp";
+import fs from "../common/fs-async.js";
 
+const choosePackageLocation = () => {
+    const path = remote.dialog.showOpenDialog({
+        properties: ['openDirectory']
+    });
+
+    if(path)
+        packageInfo.choosePackageLocation(path[0]);
+}
+
+let savePackage;
+let errors = [];
+
+packageInfo.subscribe(p => {
+    savePackage = () => packageInfo.savePackage(p.currentPackageLocation);
+})
+
+const openPackage = () => {
+    const path = remote.dialog.showOpenDialog({
+        properties: ['openDirectory']
+    });
+
+    if(!path) return;
+    
+    errors = packageInfo.openPackage(path[0]);
+}
 
 </script>
 
-<div>
-    Package Location: {$packageInfo.currentPackageLocation}
-</div>
+<div class="root">
+        
+    <div class="actions">
+        <Button color="secondary" 
+                groupPosition="left"
+                on:click={choosePackageLocation}>Choose Package Location</Button>
+        <Button color="secondary" 
+                groupPosition="middle"
+                on:click={savePackage}>Save Package</Button>
+        <Button color="secondary" 
+                groupPosition="middle"
+                on:click={createNewPackage}>Create New</Button>
+        <Button color="secondary" 
+                groupPosition="right">Open</Button>
+    </div>
 
-<div>
-    <Button className
-            color="secondary" 
-            groupPosition="left">Choose Package Location</Button>
-    <Button color="secondary" 
-            groupPosition="middle">Save Package</Button>
-    <Button color="secondary" 
-            groupPosition="middle">Create New</Button>
-    <Button color="secondary" 
-            groupPosition="right">Open</Button>
+    <div>
+        <div class="info">Package Location: <span class="value">{$packageInfo.currentPackageLocation}</span></div>
+        <div class="info">Last Saved: <span class="value">{$packageInfo.lastSaved ? $packageInfo.lastSaved : "never"}</span></div>
+    </div>
+
+    {#if $packageInfo.packageManagerErrors.length > 0}
+    <div class="errors">
+        
+        {#each $packageInfo.packageManagerErrors as error}
+        <div>{error}</div>
+        {/each}
+        
+    </div>
+    {/if}
+
 </div>
 
 <style>
 
+.root {
+    padding: 10px; 
+}
+.actions {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.info {
+    margin-top: 10px;
+}
+
+.info .value {
+    font-weight: bold;
+}
+
+.errors {
+    background-color: rgb(244, 66, 66, 0.1);
+    border-radius: var(--borderradiusall);
+    padding:15px;
+    margin-top: 20px;
+}
 
 </style>

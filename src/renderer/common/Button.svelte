@@ -3,7 +3,7 @@
 export let color = "primary";
 export let className = "";
 export let style = "";
-export let groupPostion = "";
+export let groupPosition = "";
 
 $: borderClass = groupPosition === "left"
                  ? "border-left"
@@ -31,6 +31,7 @@ $: borderClass = groupPosition === "left"
 button {  
     border-style: solid; 
     padding: 7px 15px;
+    cursor:pointer;
 }
 
 /* ---- PRIMARY ----*/

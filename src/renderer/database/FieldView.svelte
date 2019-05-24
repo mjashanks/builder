@@ -19,9 +19,8 @@ export let onFinished = () => {};
 export let database;
 
 let errors = [];
+let clonedField = cloneDeep(field);
 
-//$:isValid = errors.length === 0;
-$: clonedField = cloneDeep(field);
 $: isNew = !!field && field.name.length === 0;
 
 $: possibleReferenceIndexes = getPotentialReferenceIndexes(
@@ -62,7 +61,7 @@ const save = () => {
     {#if isNew}
     <Textbox label="Field Name" bind:text={clonedField.name} />
     {:else}
-    <div style="font-weight: bold">{field.name}</div>
+    <div style="font-weight: bold">{clonedField.name}</div>
     {/if}
 
     <Textbox label="Label" bind:text={clonedField.label} />

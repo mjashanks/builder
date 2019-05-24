@@ -1,7 +1,7 @@
 import {createNewHeirarchy} from "../common/core";
 
 export const createPackage = (packageInfo, database) => {
-  packageInfo.createNewPackage("");
+    packageInfo.createNewPackage("");
     const root = createNewHeirarchy();
     database.importHierarchy(root);
 };

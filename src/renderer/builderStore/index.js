@@ -12,10 +12,15 @@ export const createNewPackage = () =>
 export const activeNav = bbWritable("activeNav", "database");
 
 export const initialise = async () => {
-    await initialiseLocalFolder();
-    await packageInfo.initialise();
-    await database.initialise();
-    await activeNav.initialise();
+    try {
+        await initialiseLocalFolder();
+        await packageInfo.initialise();
+        await database.initialise();
+        await activeNav.initialise();
+    } catch(err) {
+        console.log(err);
+    }
+
 }
 
 

@@ -22,12 +22,17 @@ export const bbWritable = (name, initial, modifyStored) => {
     let hasInitialised = false;
 
     const initialise = async () => {
-        hasInitialised = true;
         const jsonFromStore = await getOrCreateFile(
             localStorageKey, 
             JSON.stringify(initial, null, 2));
-        const val = modifyStored(JSON.parse(jsonFromStore));    
-        wr.set(val);
+        try{
+            const val = modifyStored(JSON.parse(jsonFromStore));
+            wr.set(val); 
+            hasInitialised = true;   
+        } catch(e) {
+            console.log(e);
+        }
+        
     }
 
     wr.subscribe(v => {
@@ -51,14 +56,25 @@ export const initialiseLocalFolder = async () => {
 }
 
 export const getOrCreateFile = async (path, defaultContent) => {
-    try {
-        return await readFile(path, {encoding:"utf8"});
-    } catch(_) {
+
+    const writeAndReturnDefault = async () => {
         await writeFile(path, defaultContent, "utf8");
         return defaultContent;
     }
+
+    try {
+        const contents =  await readFile(path, {encoding:"utf8"});
+        if(!contents) return await writeAndReturnDefault(); 
+        return contents;
+    } catch(_) {
+        return await writeAndReturnDefault();
+    }
 }
 
+const currentSavedValues = {}
+
 export const writeFileFireAndForget = (path, content) => {
+    if(currentSavedValues[path] === content) return;
+    currentSavedValues[path] = content;
     fs.writeFile(path, content, "utf8", () => {});
 } 
