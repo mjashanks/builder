@@ -1,5 +1,6 @@
 <script>
 import Button from "../common/Button.svelte";
+import ButtonGroup from "../common/ButtonGroup.svelte";
 import {database} from "../builderStore";
 import Modal from "../common/Modal.svelte";
 import ErrorsBox from "../common/ErrorsBox.svelte";
@@ -19,19 +20,21 @@ const deleteCurrentNode = () => {
 
 <div class="root" style="left: {left}">
 
-    <Button color="primary" on:click={database.saveCurrentNode}>
-        {#if $database.currentNodeIsNew}
-        Create
-        {:else}
-        Update
-        {/if}
-    </Button>
+    <ButtonGroup>
+        <Button color="secondary" grouped on:click={database.saveCurrentNode}>
+            {#if $database.currentNodeIsNew}
+            Create
+            {:else}
+            Update
+            {/if}
+        </Button>
 
-    {#if !$database.currentNodeIsNew}
-    <Button color="deletion" on:click={openConfirmDelete}>
-        Delete
-    </Button>
-    {/if}
+        {#if !$database.currentNodeIsNew}
+        <Button color="secondary" grouped on:click={openConfirmDelete}>
+            Delete
+        </Button>
+        {/if}
+    </ButtonGroup>
 
     {#if !!$database.errors && $database.errors.length > 0}
     <div style="width: 500px">

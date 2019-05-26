@@ -52,3 +52,5 @@ export const getDefaultTypeOptions = type =>
 
 export const getNewAction = () => templateApi({}).createAction();
 export const getNewTrigger = () => templateApi({}).createTrigger();
+
+export const validateActions = actions => templateApi({}).validateActions(actions);

@@ -3,6 +3,12 @@ import UIkit from "uikit";
 
 export let isOpen = false;
 let ukModal;
+let listenerAdded = false;
+
+$: if(ukModal && !listenerAdded) {
+    listenerAdded = true;
+    ukModal.addEventListener("hide", () => isOpen = false);
+}
 
 $: {
     if(ukModal) {
@@ -16,7 +22,7 @@ $: {
 
 </script>
 
-<div bind:this={ukModal} uk-modal>
+<div bind:this={ukModal} uk-modal >
     <div class="uk-modal-dialog uk-modal-body" uk-overflow-auto>
         <slot />
     </div>

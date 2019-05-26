@@ -2,6 +2,7 @@
 import Dropdown from "../common/Dropdown.svelte";
 import Textbox from "../common/Textbox.svelte";
 import Button from "../common/Button.svelte";
+import ButtonGroup from "../common/ButtonGroup.svelte";
 import NumberBox from "../common/NumberBox.svelte";
 import ValuesList from "../common/ValuesList.svelte";
 import ErrorsBox from "../common/ErrorsBox.svelte";
@@ -100,19 +101,14 @@ const save = () => {
     <NumberBox label="Max Length" bind:value={clonedField.typeOptions.maxLength} />
     {/if}
 
-    <div class="actions">
-        <Button color="primary" on:click={save}>Save</Button>
-        <Button color="secondary" on:click={() => onFinished(false)}>Cancel</Button>
-    </div>
+    <ButtonGroup style="float: right;">
+        <Button color="primary" grouped on:click={save}>Save</Button>
+        <Button color="secondary" grouped on:click={() => onFinished(false)}>Cancel</Button>
+    </ButtonGroup>
 
 </div>
 
 <style>
-
-.actions {
-    float:right;
-    padding: 10px;
-}
 
 
 

@@ -1,7 +1,7 @@
 import {bbWritable} from "./useLocalStorage";
 import {hierarchy as hierarchyFunctions, 
     common, getTemplateApi } from "budibase-core"; 
-import {filter, cloneDeep, sortBy,
+import {filter, cloneDeep, sortBy, merge,
     find, isEmpty} from "lodash/fp";
 import {chain, getNode, validate,
     constructHierarchy, templateApi} from "../common/core";
@@ -37,6 +37,8 @@ export const getDatabaseStore = () => {
     writable.deleteCurrentNode = deleteCurrentNode(writable);
     writable.saveField = saveField(writable);
     writable.deleteField = deleteField(writable);
+    writable.addAction = addAction(writable);
+    writable.deleteAction = deleteAction(writable);
     return writable;
 } 
 
@@ -181,6 +183,27 @@ const deleteField = databaseStore => field => {
 
         return db;
     });
+}
+
+const addAction = databaseStore => action => {
+    databaseStore.update(db => {
+        const existingAction = find(a => a.name === action.name)(db.actions);
+            
+        if(existingAction) {
+            merge(action)(existingAction);
+        } else {
+            db.actions.push(action);
+        }
+
+        return db;
+    })
+}
+
+const deleteAction  = databaseStore => action => {
+    databaseStore.update(db => {
+        db.actions = filter(a => a.name !== action.name)(db.actions);
+        return db;
+    })
 }
 
 const createShadowHierarchy = hierarchy => 

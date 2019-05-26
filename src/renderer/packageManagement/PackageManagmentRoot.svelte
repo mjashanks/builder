@@ -1,6 +1,7 @@
 <script>
 
 import Button from "../common/Button.svelte";
+import ButtonGroup from "../common/ButtonGroup.svelte";
 import {packageInfo, createNewPackage} from "../builderStore"
 import {remote} from "electron";
 import {join} from "lodash/fp";
@@ -36,19 +37,19 @@ const openPackage = () => {
 
 <div class="root">
         
-    <div class="actions">
+    <ButtonGroup style="margin-bottom: 20px">
         <Button color="secondary" 
-                groupPosition="left"
+                grouped
                 on:click={choosePackageLocation}>Choose Package Location</Button>
         <Button color="secondary" 
-                groupPosition="middle"
+                grouped
                 on:click={savePackage}>Save Package</Button>
         <Button color="secondary" 
-                groupPosition="middle"
+                grouped
                 on:click={createNewPackage}>Create New</Button>
         <Button color="secondary" 
-                groupPosition="right">Open</Button>
-    </div>
+                grouped>Open</Button>
+    </ButtonGroup>
 
     <div>
         <div class="info">Package Location: <span class="value">{$packageInfo.currentPackageLocation}</span></div>
@@ -71,10 +72,6 @@ const openPackage = () => {
 
 .root {
     padding: 10px; 
-}
-.actions {
-    display: flex;
-    margin-bottom: 20px;
 }
 
 .info {

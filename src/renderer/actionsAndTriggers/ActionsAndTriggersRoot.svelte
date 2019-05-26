@@ -31,7 +31,10 @@ let newAction = () => {
     editingActionIsNew = true;
 }
 
-let deleteAction = () => {}
+let deleteAction = (action) => {
+    database.deleteAction(action);
+}
+
 let deleteTrigger = () => {}
 
 let editTrigger = (trigger) => {
@@ -57,7 +60,9 @@ let newTrigger = () => {
             on:click={newTrigger}>Create New Trigger</Button>
 </ButtonGroup>
 
-<Actions editingActionIsNew bind:editingAction />
+<Actions editingActionIsNew bind:editingAction 
+         onEditAction={editAction}
+         onDeleteAction={deleteAction} />
 
 <Triggers editingTriggerIsNew bind:editingTrigger />
 
@@ -69,10 +74,5 @@ let newTrigger = () => {
     padding: 0px 10px 10px 20px;
 }
 
-.actions {
-    margin-top: 15px;
-    margin-bottom: 25px;
-    display: flex;
-}
 
 </style>

@@ -6,9 +6,13 @@ import Button from "../common/Button.svelte";
 import ButtonGroup from "../common/ButtonGroup.svelte";
 import ActionView from "./ActionView.svelte";
 import Modal from "../common/Modal";
+import {chain} from "../common/core";
+import {keys, map, join} from "lodash/fp";
 
 export let editingActionIsNew = false;
 export let editingAction = null;
+export let onEditAction = (action) => {};
+export let onDeleteAction = (action) => {};
 
 let getDefaultOptionsHtml = defaultOptions => 
     chain(defaultOptions, [
@@ -17,14 +21,13 @@ let getDefaultOptionsHtml = defaultOptions =>
         join("<br>")
     ]);
 
-let editAction = () => {}
-let deleteAction = () => {}
-
-let newAction = () => {}
-let newTrigger = () => {}
 
 let actionEditingFinished = (action) => {
+    
     editingAction = null;
+    if(action) {
+        database.addAction(action);
+    }
 }
 
 </script>
@@ -49,9 +52,9 @@ let actionEditingFinished = (action) => {
             <td >{action.behaviourSource}</td>
             <td >{action.behaviourName}</td>
             <td >{getDefaultOptionsHtml(action.initialOptions)}</td>
-            <td>
-                <span class="edit-button" on:click={() => editAction(action)}>{@html getIcon("edit")}</span>
-                <span class="edit-button" on:click={() => deleteAction(action)}>{@html getIcon("trash")}</span>
+            <td class="edit-button">
+                <span on:click={() => onEditAction(action)}>{@html getIcon("edit")}</span>
+                <span on:click={() => onDeleteAction(action)}>{@html getIcon("trash")}</span>
             </td>
         </tr>
         {/each}
@@ -72,6 +75,14 @@ let actionEditingFinished = (action) => {
 
 <style>
 
+.edit-button {
+    cursor:pointer;
+    color: var(--white);
+}
+
+tr:hover .edit-button  {
+    color: var(--secondary75);
+}
 
 
 </style>
