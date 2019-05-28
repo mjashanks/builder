@@ -11,22 +11,27 @@ import {keys, map, join} from "lodash/fp";
 
 export let editingActionIsNew = false;
 export let editingAction = null;
-export let onEditAction = (action) => {};
-export let onDeleteAction = (action) => {};
+export let onActionEdit = (action) => {};
+export let onActionDelete = (action) => {};
+export let onActionSave = (action) => {};
+export let onActionCancel = () => {};
+
+$: isEditing = (editingAction !== null); 
 
 let getDefaultOptionsHtml = defaultOptions => 
     chain(defaultOptions, [
         keys,
-        map(k => `<span style="color:var(--slate)">${k}: </span>${JSON.parse(typeOptions[k])}`),
+        map(k => `<span style="color:var(--slate)">${k}: </span>${JSON.stringify(defaultOptions[k])}`),
         join("<br>")
     ]);
 
 
 let actionEditingFinished = (action) => {
     
-    editingAction = null;
     if(action) {
-        database.addAction(action);
+        onActionSave(action)
+    } else {
+        onActionCancel();
     }
 }
 
@@ -51,10 +56,10 @@ let actionEditingFinished = (action) => {
             <td >{action.name}</td>
             <td >{action.behaviourSource}</td>
             <td >{action.behaviourName}</td>
-            <td >{getDefaultOptionsHtml(action.initialOptions)}</td>
+            <td >{@html getDefaultOptionsHtml(action.initialOptions)}</td>
             <td class="edit-button">
-                <span on:click={() => onEditAction(action)}>{@html getIcon("edit")}</span>
-                <span on:click={() => onDeleteAction(action)}>{@html getIcon("trash")}</span>
+                <span on:click={() => onActionEdit(action)}>{@html getIcon("edit")}</span>
+                <span on:click={() => onActionDelete(action)}>{@html getIcon("trash")}</span>
             </td>
         </tr>
         {/each}
@@ -64,14 +69,16 @@ let actionEditingFinished = (action) => {
 (no actions added)
 {/if}
 
-{#if editingAction}
-<Modal isOpen={!!editingAction}>
+
+<Modal bind:isOpen={isEditing}>
+    {#if isEditing}
     <ActionView action={editingAction}
                 allActions={$database.actions}
                 onFinished={actionEditingFinished}
                 isNew={editingActionIsNew}/>
+    {/if}    
 </Modal>
-{/if}
+
 
 <style>
 

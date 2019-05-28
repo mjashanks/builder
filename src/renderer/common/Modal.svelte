@@ -2,12 +2,14 @@
 import UIkit from "uikit";
 
 export let isOpen = false;
+export let onClosed = () => {};
+
 let ukModal;
 let listenerAdded = false;
 
 $: if(ukModal && !listenerAdded) {
     listenerAdded = true;
-    ukModal.addEventListener("hide", () => isOpen = false);
+    ukModal.addEventListener("hide", onClosed);
 }
 
 $: {

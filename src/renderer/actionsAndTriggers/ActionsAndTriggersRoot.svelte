@@ -10,7 +10,6 @@ import {getNewAction, getNewTrigger} from "../common/core";
 
 let editingAction = null;
 let editingActionIsNew = true;
-
 let editingTrigger = null;
 let editingTriggerIsNew = true;
 
@@ -21,7 +20,7 @@ let getDefaultOptionsHtml = defaultOptions =>
         join("<br>")
     ]);
 
-let editAction = (action) => {
+let onActionEdit = (action) => {
     editingAction = action;
     editingActionIsNew = false;
 }
@@ -31,7 +30,7 @@ let newAction = () => {
     editingActionIsNew = true;
 }
 
-let deleteAction = (action) => {
+let onActionDelete = (action) => {
     database.deleteAction(action);
 }
 
@@ -47,6 +46,19 @@ let newTrigger = () => {
     editingTriggerIsNew = true;
 }
 
+let onActionSave = action => {
+    database.saveAction(
+            action, 
+            editingActionIsNew, 
+            editingAction);
+
+    editingAction = null;
+}
+
+let onActionCancel = () => {
+    editingAction = null;
+}
+
 </script>
 
 <div class="root">
@@ -60,9 +72,9 @@ let newTrigger = () => {
             on:click={newTrigger}>Create New Trigger</Button>
 </ButtonGroup>
 
-<Actions editingActionIsNew bind:editingAction 
-         onEditAction={editAction}
-         onDeleteAction={deleteAction} />
+<Actions {editingActionIsNew} {editingAction} 
+         {onActionEdit} {onActionDelete} {onActionSave}
+         {onActionCancel} />
 
 <Triggers editingTriggerIsNew bind:editingTrigger />
 

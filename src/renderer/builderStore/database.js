@@ -1,7 +1,7 @@
 import {bbWritable} from "./useLocalStorage";
 import {hierarchy as hierarchyFunctions, 
     common, getTemplateApi } from "budibase-core"; 
-import {filter, cloneDeep, sortBy, merge,
+import {filter, cloneDeep, sortBy, map,
     find, isEmpty} from "lodash/fp";
 import {chain, getNode, validate,
     constructHierarchy, templateApi} from "../common/core";
@@ -37,7 +37,7 @@ export const getDatabaseStore = () => {
     writable.deleteCurrentNode = deleteCurrentNode(writable);
     writable.saveField = saveField(writable);
     writable.deleteField = deleteField(writable);
-    writable.addAction = addAction(writable);
+    writable.saveAction = saveAction(writable);
     writable.deleteAction = deleteAction(writable);
     return writable;
 } 
@@ -185,14 +185,20 @@ const deleteField = databaseStore => field => {
     });
 }
 
-const addAction = databaseStore => action => {
+
+const saveAction = databaseStore => (newAction, isNew, oldAction=null) => {
     databaseStore.update(db => {
-        const existingAction = find(a => a.name === action.name)(db.actions);
+
+        const existingAction = isNew 
+                               ? null
+                               : find(a => a.name === oldAction.name)(db.actions);
             
         if(existingAction) {
-            merge(action)(existingAction);
+            db.actions = chain(db.actions, [
+                map(a => a === existingAction ? newAction : a)
+            ]);
         } else {
-            db.actions.push(action);
+            db.actions.push(newAction);
         }
 
         return db;
