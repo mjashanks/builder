@@ -39,6 +39,8 @@ export const getDatabaseStore = () => {
     writable.deleteField = deleteField(writable);
     writable.saveAction = saveAction(writable);
     writable.deleteAction = deleteAction(writable);
+    writable.saveTrigger = saveTrigger(writable);
+    writable.deleteTrigger = deleteTrigger(writable);
     return writable;
 } 
 
@@ -208,6 +210,32 @@ const saveAction = databaseStore => (newAction, isNew, oldAction=null) => {
 const deleteAction  = databaseStore => action => {
     databaseStore.update(db => {
         db.actions = filter(a => a.name !== action.name)(db.actions);
+        return db;
+    })
+}
+
+const saveTrigger = databaseStore => (newTrigger, isNew, oldTrigger=null) => {
+    databaseStore.update(db => {
+
+        const existingTrigger = isNew 
+                               ? null
+                               : find(a => a.name === oldTrigger.name)(db.triggers);
+            
+        if(existingTrigger) {
+            db.triggers = chain(db.triggers, [
+                map(a => a === existingTrigger ? newTrigger : a)
+            ]);
+        } else {
+            db.triggers.push(newTrigger);
+        }
+
+        return db;
+    })
+}
+
+const deleteTrigger  = databaseStore => trigger => {
+    databaseStore.update(db => {
+        db.triggers = filter(t => t.name !== trigger.name)(db.triggers);
         return db;
     })
 }

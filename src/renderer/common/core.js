@@ -4,6 +4,8 @@ import {find, filter, includes, flatten, map} from "lodash/fp";
 
 export const chain = common.$;
 
+export const events = common.eventsList;
+
 export const getNode = (hierarchy, nodeId) => 
     chain(hierarchy, [
         hierarchyFunctions.getFlattenedHierarchy,
@@ -54,3 +56,4 @@ export const getNewAction = () => templateApi({}).createAction();
 export const getNewTrigger = () => templateApi({}).createTrigger();
 
 export const validateActions = actions => templateApi({}).validateActions(actions);
+export const validateTriggers = (triggers, actions) => templateApi({}).validateTriggers(triggers, actions);

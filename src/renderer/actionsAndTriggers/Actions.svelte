@@ -40,7 +40,7 @@ let actionEditingFinished = (action) => {
 <h3>Actions</h3>
 
 {#if $database.actions}
-<table class="fields-table uk-table">
+<table class="fields-table uk-table uk-table-small">
     <thead>
         <tr>
             <th>Description</th>

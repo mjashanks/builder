@@ -3,33 +3,40 @@
 import {database} from "../builderStore";
 import getIcon from "../common/icon";
 import Button from "../common/Button.svelte";
+import Modal from "../common/Modal";
+import TriggerView from "./TriggerView.svelte";
+
 
 export let editingTrigger = null;
 export let editingTriggerIsNew = true;
+export let onTriggerEdit = (trigger) => {};
+export let onTriggerDelete = (trigger) => {};
+export let onTriggerSave = (trigger) => {};
+export let onTriggerCancel = () => {};
 
-let getDefaultOptionsHtml = defaultOptions => 
-    chain(defaultOptions, [
-        keys,
-        map(k => `<span style="color:var(--slate)">${k}: </span>${JSON.parse(typeOptions[k])}`),
-        join("<br>")
-    ]);
+$: isEditing = (editingTrigger !== null); 
 
-let editTrigger = () => {}
-let deleteTrigger = () => {}
-
+let triggerEditingFinished = (trigger) => {
+    
+    if(trigger) {
+        onTriggerSave(trigger)
+    } else {
+        onTriggerCancel();
+    }
+}
 
 </script>
 
 <h3>Triggers</h3>
 
 {#if $database.triggers}
-<table class="fields-table uk-table">
+<table class="fields-table uk-table uk-table-small">
     <thead>
         <tr>
             <th>Event</th>
             <th>Action</th>
-            <th>Create Options</th>
             <th>Condition</th>
+            <th>Create Options</th>
             <th></th>
         </tr>
     </thead>
@@ -38,11 +45,11 @@ let deleteTrigger = () => {}
         <tr>
             <td >{trigger.eventName}</td>
             <td >{trigger.actionName}</td>
-            <td >{trigger.optionsCreator}</td>
             <td >{trigger.condition}</td>
-            <td>
-                <span class="edit-button" on:click={() => editTrigger(trigger)}>{@html getIcon("edit")}</span>
-                <span class="edit-button" on:click={() => deleteTrigger(trigger)}>{@html getIcon("trash")}</span>
+            <td >{trigger.optionsCreator}</td>
+            <td class="edit-button">
+                <span on:click={() => onTriggerEdit(trigger)}>{@html getIcon("edit")}</span>
+                <span on:click={() => onTriggerDelete(trigger)}>{@html getIcon("trash")}</span>
             </td>
         </tr>
         {/each}
@@ -53,7 +60,25 @@ let deleteTrigger = () => {}
 {/if}
 
 
+<Modal bind:isOpen={isEditing}>
+    {#if isEditing}
+    <TriggerView trigger={editingTrigger}
+                allActions={$database.actions}
+                allTriggers={$database.triggers}
+                onFinished={triggerEditingFinished}
+                isNew={editingTriggerIsNew}/>
+    {/if}    
+</Modal>
+
 <style>
 
+.edit-button {
+    cursor:pointer;
+    color: var(--white);
+}
+
+tr:hover .edit-button  {
+    color: var(--secondary75);
+}
 
 </style>

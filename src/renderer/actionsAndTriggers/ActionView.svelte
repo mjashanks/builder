@@ -92,7 +92,7 @@ const cancel = () => {
         <Button color="secondary" grouped on:click={cancel}>Cancel</Button>
     </ButtonGroup>
 
-    <ErrorsBox errors />
+    <ErrorsBox {errors} />
 </div>
 
 

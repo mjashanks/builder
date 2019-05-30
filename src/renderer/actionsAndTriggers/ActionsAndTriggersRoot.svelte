@@ -59,6 +59,29 @@ let onActionCancel = () => {
     editingAction = null;
 }
 
+let onTriggerSave = trigger => {
+    database.saveTrigger(
+            trigger, 
+            editingTriggerIsNew, 
+            editingTrigger);
+
+    editingTrigger = null;
+}
+
+let onTriggerCancel = () => {
+    editingTrigger = null;
+}
+
+let onTriggerEdit = (trigger) => {
+    editingTrigger = trigger;
+    editingTriggerIsNew = false;
+}
+
+
+let onTriggerDelete = (trigger) => {
+    database.deleteTrigger(trigger);
+}
+
 </script>
 
 <div class="root">
@@ -76,7 +99,9 @@ let onActionCancel = () => {
          {onActionEdit} {onActionDelete} {onActionSave}
          {onActionCancel} />
 
-<Triggers editingTriggerIsNew bind:editingTrigger />
+<Triggers {editingTriggerIsNew} {editingTrigger} 
+         {onTriggerEdit} {onTriggerDelete} {onTriggerSave}
+         {onTriggerCancel} />
 
 </div>
 
