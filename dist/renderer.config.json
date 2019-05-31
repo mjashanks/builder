@@ -30,6 +30,7 @@
     "extensions": [
       ".mjs",
       ".js",
+      ".ejs",
       ".json",
       ".svelte"
     ]
@@ -43,25 +44,96 @@
           "loader": "svelte-loader",
           "options": {
             "emitCss": true,
-            "hotReload": true
+            "hotReload": false
           }
         }
       },
       {
         "test": {},
-        "use": [
-          {
-            "loader": "C:\\code\\budibase\\builder\\node_modules\\extract-text-webpack-plugin\\dist\\loader.js",
-            "options": {
-              "id": 1,
-              "omit": 0,
-              "remove": true
-            }
-          },
-          {
-            "loader": "css-loader"
+        "exclude": {},
+        "use": {
+          "loader": "babel-loader",
+          "options": {
+            "presets": [
+              [
+                null,
+                {
+                  "modules": false,
+                  "targets": {
+                    "electron": "4.0.1"
+                  }
+                }
+              ]
+            ],
+            "plugins": [
+              null
+            ]
           }
+        }
+      },
+      {
+        "test": {},
+        "use": "node-loader"
+      },
+      {
+        "test": {},
+        "use": [
+          "css-hot-loader",
+          "C:\\code\\budibase\\builder\\node_modules\\mini-css-extract-plugin\\dist\\loader.js",
+          "css-loader"
         ]
+      },
+      {
+        "test": {},
+        "use": [
+          "css-hot-loader",
+          "C:\\code\\budibase\\builder\\node_modules\\mini-css-extract-plugin\\dist\\loader.js",
+          "css-loader",
+          "less-loader"
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          "css-hot-loader",
+          "C:\\code\\budibase\\builder\\node_modules\\mini-css-extract-plugin\\dist\\loader.js",
+          "css-loader",
+          "sass-loader"
+        ]
+      },
+      {
+        "test": {},
+        "use": {
+          "loader": "url-loader",
+          "options": {
+            "limit": 10240,
+            "name": "imgs/[name]--[folder].[ext]"
+          }
+        }
+      },
+      {
+        "test": {},
+        "loader": "url-loader",
+        "options": {
+          "limit": 10240,
+          "name": "media/[name]--[folder].[ext]"
+        }
+      },
+      {
+        "test": {},
+        "use": {
+          "loader": "url-loader",
+          "options": {
+            "limit": 10240,
+            "name": "fonts/[name]--[folder].[ext]"
+          }
+        }
+      },
+      {
+        "test": {},
+        "use": {
+          "loader": "html-loader"
+        }
       },
       {
         "test": {},
@@ -78,19 +150,6 @@
   },
   "plugins": [
     {
-      "filename": "styles.css",
-      "id": 1,
-      "options": {}
-    },
-    {
-      "definitions": {
-        "definitions": {
-          "__static": "\"./static\"",
-          "process.env.NODE_ENV": "\"development\""
-        }
-      }
-    },
-    {
       "options": {
         "template": "!!html-loader?minimize=false&url=false!C:\\code\\budibase\\builder\\dist\\.renderer-index-template.html",
         "filename": "index.html",
@@ -106,22 +165,41 @@
         "chunksSortMode": "auto",
         "meta": {},
         "title": "Webpack App",
-        "xhtml": false
+        "xhtml": false,
+        "nodeModules": "C:\\code\\budibase\\builder\\node_modules"
       }
+    },
+    {
+      "options": {
+        "filename": "styles.css",
+        "chunkFilename": "[id].styles.css"
+      }
+    },
+    {
+      "definitions": {
+        "__static": "\"C:\\\\code\\\\budibase\\\\builder\\\\static\"",
+        "process.env.NODE_ENV": "\"development\""
+      }
+    },
+    {
+      "options": {},
+      "fullBuildTimeout": 200,
+      "requestTimeout": 10000
+    },
+    {},
+    {
+      "dllManifest": null
     }
   ],
   "devServer": {
     "contentBase": [
       "C:\\code\\budibase\\builder\\static",
-      "C:\\code\\budibase\\builder\\dist\\renderer-dll",
-      "./static",
-      "./dist/renderer-dll"
+      "C:\\code\\budibase\\builder\\dist\\renderer-dll"
     ],
     "host": "localhost",
-    "port": "9080",
-    "hot": false,
-    "overlay": true,
-    "watchContentBase": true
+    "port": 9080,
+    "hot": true,
+    "overlay": true
   },
   "optimization": {
     "nodeEnv": "development",
