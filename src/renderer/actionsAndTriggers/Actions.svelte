@@ -1,7 +1,7 @@
 <script>
 
-import {database} from "../builderStore";
 import getIcon from "../common/icon";
+import {database} from "../builderStore";
 import Button from "../common/Button.svelte";
 import ButtonGroup from "../common/ButtonGroup.svelte";
 import ActionView from "./ActionView.svelte";

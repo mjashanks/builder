@@ -14,6 +14,7 @@ export const getDatabaseStore = () => {
         triggers: [],
         currentNodeIsNew: false,
         errors: [],
+        accessLevels: [],
         currentNode: null}, 
         db => {
             if(!!db.hierarchy && !isEmpty(db.hierarchy)) {
@@ -41,6 +42,8 @@ export const getDatabaseStore = () => {
     writable.deleteAction = deleteAction(writable);
     writable.saveTrigger = saveTrigger(writable);
     writable.deleteTrigger = deleteTrigger(writable);
+    writable.saveLevel = saveLevel(writable);
+    writable.deleteLevel = deleteLevel(writable);
     return writable;
 } 
 
@@ -79,7 +82,7 @@ const newIndex = (databaseStore, useRoot) => () => {
         db.currentNodeIsNew = true;
         db.errors = [];
         const shadowHierarchy = createShadowHierarchy(db.hierarchy);
-        parent = !useRoot ? shadowHierarchy
+        parent = useRoot ? shadowHierarchy
                  : getNode(
                     shadowHierarchy, 
                     db.currentNode.nodeId);
@@ -131,6 +134,8 @@ const saveCurrentNode = (databaseStore) => () => {
             sortBy(newIndexOfchild)
         ]);
 
+        db.currentNodeIsNew = false;
+        
         return db;
     });
 }
@@ -236,6 +241,32 @@ const saveTrigger = databaseStore => (newTrigger, isNew, oldTrigger=null) => {
 const deleteTrigger  = databaseStore => trigger => {
     databaseStore.update(db => {
         db.triggers = filter(t => t.name !== trigger.name)(db.triggers);
+        return db;
+    })
+}
+
+const saveLevel = databaseStore => (newLevel, isNew, oldLevel=null) => {
+    databaseStore.update(db => {
+
+        const existingLevel = isNew 
+                               ? null
+                               : find(a => a.name === oldLevel.name)(db.accessLevels);
+            
+        if(existingLevel) {
+            db.accessLevels = chain(db.accessLevels, [
+                map(a => a === existingLevel ? newLevel : a)
+            ]);
+        } else {
+            db.accessLevels.push(newLevel);
+        }
+
+        return db;
+    })
+}
+
+const deleteLevel = databaseStore => level => {
+    databaseStore.update(db => {
+        db.accessLevels = filter(t => t.name !== level.name)(db.accessLevels);
         return db;
     })
 }

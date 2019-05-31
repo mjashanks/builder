@@ -1,7 +1,8 @@
 <script>
+export let style="";
 </script>
 
-<div class="root">
+<div class="root" style={style}>
     <slot />
 </div>
 

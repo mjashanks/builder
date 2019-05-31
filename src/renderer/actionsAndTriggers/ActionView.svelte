@@ -68,6 +68,8 @@ const cancel = () => {
 
 <div class="root">
 
+    <ErrorsBox {errors} />
+
     <Textbox label="Name" bind:text={clonedAction.name} />
     <Textbox label="Behaviour Source" bind:text={clonedAction.behaviourSource} />
     <Textbox label="Behaviour" bind:text={clonedAction.behaviourName} />
@@ -92,7 +94,7 @@ const cancel = () => {
         <Button color="secondary" grouped on:click={cancel}>Cancel</Button>
     </ButtonGroup>
 
-    <ErrorsBox {errors} />
+    
 </div>
 
 

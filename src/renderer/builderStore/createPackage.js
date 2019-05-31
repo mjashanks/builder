@@ -6,7 +6,9 @@ export const createPackage = (packageInfo, database) => {
     database.importAppDefinition({
       hierarchy:root,
       actions:[],
-      triggers:[]
+      triggers:[],
+      accessLevels: [],
+      accessLevelsVersion: 0
     });
 };
 

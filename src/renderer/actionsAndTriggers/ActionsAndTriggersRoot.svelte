@@ -1,7 +1,7 @@
 <script>
 
-import {database} from "../builderStore";
 import getIcon from "../common/icon";
+import {database} from "../builderStore";
 import Button from "../common/Button.svelte";
 import ButtonGroup from "../common/ButtonGroup.svelte";
 import Actions from "./Actions.svelte";
@@ -108,7 +108,7 @@ let onTriggerDelete = (trigger) => {
 <style>
 
 .root {
-    padding: 0px 10px 10px 20px;
+    padding: 10px;
 }
 
 

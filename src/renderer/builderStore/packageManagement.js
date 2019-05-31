@@ -3,6 +3,7 @@ import {access, readFile,
     mkdir, writeFile} from "../common/fs-async";
 import { get } from 'svelte/store';
 import path from "path";
+import {keyBy} from "lodash/fp";
 
 export default (databaseStore) => {
 
@@ -41,6 +42,7 @@ const choosePackageLocation = packageStore => location => {
 }
 
 const appDefinitionFile = folder => path.join(folder, "appDefinition.json")
+const accessLevelsFile = folder => path.join(folder, "access_levels.json")
 
 const savePackage = (databaseStore, packageStore) => async (location) => {
     
@@ -49,11 +51,19 @@ const savePackage = (databaseStore, packageStore) => async (location) => {
         appDefinitionFile(location),
         JSON.stringify({
             hierarchy: database.hierarchy,
-            actions: database.actions,
+            actions: keyBy("name")(database.actions),
             triggers: database.triggers
         }), 
         {encoding:"utf8"}
     );
+
+    await writeFile(
+        accessLevelsFile(location),
+        JSON.stringify({
+            levels: database.accessLevels,
+            version: !database.accessLevelsVersion ? 0 : database.accessLevelsVersion + 1
+        })
+    )
 
     packageStore.update(p => {
         p.lastSaved = new Date();
@@ -73,6 +83,10 @@ const openPackage = (databaseStore, packageStore) => async location => {
         errors.push([`appDefinition.json does not exist at ${location}`]);
     }
 
+    if(!await fs.access(accessLevelsFile(location))) {
+        errors.push([`access_levels.json does not exist at ${location}`]);
+    }
+
     if(errors.length > 0) {
         packageStore.update(p => {
             p.packageManagerErrors = errors;
@@ -81,7 +95,8 @@ const openPackage = (databaseStore, packageStore) => async location => {
         return;
     }
 
-    var appDefinition = await fs.readFile(appDefinitionFile(), {encoding:"utf8"});
+    const appDefinition = await fs.readFile(appDefinitionFile(location), {encoding:"utf8"});
+    const accessLevels = await fs.readFile(accessLevelsFile(location), {encoding:"utf8"});
 
     packageStore.update(p => {
         p.packageManagerErrors = [];
@@ -94,6 +109,8 @@ const openPackage = (databaseStore, packageStore) => async location => {
         db.currentNodeIsNew = false;
         db.errors = [];
         db.currentNode= null;
+        db.accessLevels = accessLevels.levels;
+        db.accessLevelsVersion = accessLevels.version;
         return db;
     });
     

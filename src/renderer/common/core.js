@@ -1,6 +1,7 @@
 import {hierarchy as hierarchyFunctions, 
-    common, getTemplateApi } from "budibase-core"; 
-import {find, filter, includes, flatten, map} from "lodash/fp";
+    common, getTemplateApi, getAuthApi } from "budibase-core"; 
+import {find, filter, includes, keyBy,
+    flatten, map} from "lodash/fp";
 
 export const chain = common.$;
 
@@ -22,6 +23,8 @@ export const createNewHeirarchy = () => {
 }
 
 export const templateApi = hierarchy => getTemplateApi({heirarchy:hierarchy})
+export const authApi = (hierarchy, actions) => getAuthApi({
+    heirarchy:hierarchy, actions: keyBy("name")(actions), publish:()=>{}})
 
 export const allTypes = templateApi({}).allTypes;
 
@@ -57,3 +60,12 @@ export const getNewTrigger = () => templateApi({}).createTrigger();
 
 export const validateActions = actions => templateApi({}).validateActions(actions);
 export const validateTriggers = (triggers, actions) => templateApi({}).validateTriggers(triggers, actions);
+
+export const generateFullPermissions = (hierarchy, actions) => 
+    authApi(hierarchy,actions).generateFullPermissions();
+
+export const getNewAccessLevel = () => 
+    authApi().getNewAccessLevel();
+
+export const validateAccessLevels = (hierarchy, actions, accessLevels) => 
+    authApi(hierarchy, actions).validateAccessLevels(accessLevels);
