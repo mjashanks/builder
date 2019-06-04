@@ -96,6 +96,8 @@ const save = () => {
               textMember={n => n.name}
               bind:selected={clonedField.typeOptions.reverseIndexNodeKeys} />
 
+    <Textbox label="Display Value" bind:text={clonedField.typeOptions.displayValue} />
+
     {:else if clonedField.type.startsWith("array")}
     <NumberBox label="Min Length" bind:value={clonedField.typeOptions.minLength} />
     <NumberBox label="Max Length" bind:value={clonedField.typeOptions.maxLength} />

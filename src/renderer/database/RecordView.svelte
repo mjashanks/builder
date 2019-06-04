@@ -20,7 +20,7 @@ let newField;
 let editField;
 let deleteField;
 let onFinishedFieldEdit;
-
+let editIndex;
 
 database.subscribe($database => {
     record = $database.currentNode;
@@ -54,6 +54,10 @@ database.subscribe($database => {
 
     deleteField = (field) => {
         database.deleteField(field);
+    }
+
+    editIndex = index => {
+        database.selectExistingNode(index.nodeId);
     }
 
 })
@@ -137,7 +141,10 @@ let getTypeOptions = typeOptions =>
 
     {#each record.indexes as index}
     <div class="index-container">
-        <div class="index-name">{index.name}</div>
+        <div class="index-name">
+            {index.name}
+            <span style="margin-left: 7px" on:click={() => editIndex(index)}>{@html getIcon("edit")}</span>
+        </div>
         <div class="index-field-row">
             <span class="index-label">records indexed: </span> 
             <span>{getIndexAllowedRecords(index)}</span>

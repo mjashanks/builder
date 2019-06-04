@@ -9,21 +9,30 @@ export let textMember;
 export let multiple=false;
 
 const dispatch =createEventDispatcher();
-const valueChanged = (event) => {
-    selected = event.target.value;
-    dispatch("change", selected);
-}
+
 
 </script>
 
 <div class="container">
     <div class="label">{label}</div>
 
-    <select class="control uk-select" multiple={multiple} value={selected} on:change={valueChanged}>
+    {#if multiple}
+    
+    <select class="control uk-select" multiple bind:value={selected} on:change>
         {#each options as option}
         <option value={!valueMember ? option : valueMember(option)}>{!textMember ? option : textMember(option)}</option>
         {/each}
     </select>
+
+    {:else}
+
+    <select class="control uk-select" bind:value={selected} on:change>
+        {#each options as option}
+        <option value={!valueMember ? option : valueMember(option)}>{!textMember ? option : textMember(option)}</option>
+        {/each}
+    </select>
+    {/if}
+
 </div>
 
 <style>

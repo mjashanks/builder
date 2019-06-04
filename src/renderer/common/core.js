@@ -1,6 +1,6 @@
 import {hierarchy as hierarchyFunctions, 
     common, getTemplateApi, getAuthApi } from "budibase-core"; 
-import {find, filter, includes, keyBy,
+import {find, filter, includes, keyBy, some,
     flatten, map} from "lodash/fp";
 
 export const chain = common.$;
@@ -34,20 +34,24 @@ export const validate = {
     field: templateApi({}).validateField
 };
 
-export const getPotentialReverseReferenceIndexes = (hierarchy, refIndex) => 
-    chain(hierarchy, [
+export const getPotentialReverseReferenceIndexes = (hierarchy, refIndex) => {
+    const res = chain(hierarchy, [
         hierarchyFunctions.getFlattenedHierarchy,
-        filter(n => includes(n.nodeId)(refIndex.allowedRecordNodeIds)),
+        filter(n => hierarchyFunctions.isAncestor(refIndex)(n)
+                    || hierarchyFunctions.isAncestor(refIndex)(n.parent())),
         map(n => n.indexes),
         flatten,
         filter(hierarchyFunctions.isReferenceIndex)
     ]);
 
+    return res;
+}
+
 export const getPotentialReferenceIndexes = (hierarchy, record) =>
     chain(hierarchy, [
         hierarchyFunctions.getFlattenedHierarchy,
         filter(hierarchyFunctions.isAncestorIndex),
-        filter(i => hierarchyFunctions.isAncestor(record)(i)
+        filter(i => hierarchyFunctions.isAncestor(record)(i.parent())
                     || i.parent().nodeId === record.parent().nodeId
                     || hierarchyFunctions.isRoot(i.parent()))
     ]);

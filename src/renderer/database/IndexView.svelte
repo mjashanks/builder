@@ -49,7 +49,7 @@ const toggleAllowedRecord = record => {
     </div>
 
 
-    <Dropdown label="Index Type" bind:value={index.indexType} options={["ancestor", "reference"]} />
+    <Dropdown label="Index Type" bind:selected={index.indexType} options={["ancestor", "reference"]} />
 
     <CodeArea bind:text={index.map} label="Map (javascript)"/>
     <CodeArea bind:text={index.filter} label="Filter (javascript expression)"/>

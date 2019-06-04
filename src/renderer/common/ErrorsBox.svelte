@@ -7,7 +7,7 @@ $:hasErrors = errors.length > 0;
 {#if hasErrors}
 <div class="error-container">
     {#each errors as error}
-    <div class="error-row">{error.error}</div>
+    <div class="error-row">{error.field ? `${error.field}: ` : ""}{error.error}</div>
     {/each}
 </div>
 {/if}
