@@ -1,9 +1,10 @@
 import {bbWritable} from "./useLocalStorage";
-import {access, readFile, 
+import {stat, readFile, 
     mkdir, writeFile} from "../common/fs-async";
 import { get } from 'svelte/store';
 import path from "path";
 import {keyBy} from "lodash/fp";
+import {constructHierarchy} from "../common/core";
 
 export default (databaseStore) => {
 
@@ -75,37 +76,43 @@ const openPackage = (databaseStore, packageStore) => async location => {
 
     let errors = [];
 
-    if(!await fs.access(location)) {
+    if(!await stat(location)) {
         errors.push([`path ${location} does not exist`]);
     }
 
-    if(!await fs.access(appDefinitionFile(location))) {
+    if(!await stat(appDefinitionFile(location))) {
         errors.push([`appDefinition.json does not exist at ${location}`]);
     }
 
-    if(!await fs.access(accessLevelsFile(location))) {
+    if(!await stat(accessLevelsFile(location))) {
         errors.push([`access_levels.json does not exist at ${location}`]);
     }
 
     if(errors.length > 0) {
         packageStore.update(p => {
             p.packageManagerErrors = errors;
+            return p;
         });
 
         return;
     }
 
-    const appDefinition = await fs.readFile(appDefinitionFile(location), {encoding:"utf8"});
-    const accessLevels = await fs.readFile(accessLevelsFile(location), {encoding:"utf8"});
+    const appDefinition = JSON.parse(
+        await readFile(appDefinitionFile(location), {encoding:"utf8"})
+    );
+    const accessLevels = JSON.parse(
+        await readFile(accessLevelsFile(location), {encoding:"utf8"})
+    );
 
     packageStore.update(p => {
         p.packageManagerErrors = [];
-        P.lastSaved = new Date();
+        p.lastSaved = new Date();
+        p.hasAppPackage = true;
         return p;
     });
 
     databaseStore.update(db => {
-        db.hierarchy = appDefinition.hierarchy;
+        db.hierarchy = constructHierarchy(appDefinition.hierarchy);
         db.currentNodeIsNew = false;
         db.errors = [];
         db.currentNode= null;

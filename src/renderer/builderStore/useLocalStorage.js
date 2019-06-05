@@ -1,7 +1,7 @@
 // useLocalStorage.js
 import {writable} from "svelte/store";
 
-import {access, readFile, 
+import {stat, readFile, 
     mkdir, writeFile} from "../common/fs-async";
 import os from "os";
 import {join} from "path";
@@ -49,7 +49,7 @@ export const bbWritable = (name, initial, modifyStored) => {
 
 export const initialiseLocalFolder = async () => {
     try {
-        await access(budibaseFolder);
+        await stat(budibaseFolder);
     } catch(_) {
         await mkdir(budibaseFolder);
     }

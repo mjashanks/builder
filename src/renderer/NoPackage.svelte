@@ -1,8 +1,20 @@
 <script>
 
 import Button from "./common/Button.svelte"
-import {createNewPackage} from "./builderStore";
+import {packageInfo, createNewPackage} from "./builderStore"
+import {remote} from "electron";
 
+let errors = [];
+
+const openPackage = () => {
+    const path = remote.dialog.showOpenDialog({
+        properties: ['openDirectory']
+    });
+
+    if(!path) return;
+    
+    errors = packageInfo.openPackage(path[0]);
+}
 
 </script>
 
@@ -19,6 +31,7 @@ import {createNewPackage} from "./builderStore";
                     Create a New Package
                 </Button>
                 <Button color="primary-outline"
+                        on:click={openPackage}
                         class="option">
                     Import a Package
                 </Button>

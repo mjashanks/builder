@@ -48,7 +48,8 @@ const openPackage = () => {
                 grouped
                 on:click={createNewPackage}>Create New</Button>
         <Button color="secondary" 
-                grouped>Open</Button>
+                grouped
+                on:click={openPackage}>Open</Button>
     </ButtonGroup>
 
     <div>
